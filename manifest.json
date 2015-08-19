@@ -1,0 +1,34 @@
+{
+    "name": "DotClear 2",
+    "id": "dotclear2",
+    "description": {
+        "en": "Blog publishing application",
+        "fr": "Moteur de blog"
+    },
+    "license": "GPL-3",
+    "maintainer": {
+        "name": "rgarrigue",
+        "email": "remy.garrigue@gmail.com",
+        "url": "http://garrigue.re"
+    },
+    "multi_instance": "false",
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "ask": {
+                    "en": "Choose a domain for DotClear 2"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "path",
+                "ask": {
+                    "en": "Choose a path for DotClear 2"
+                },
+                "example": "/dc",
+                "default": "/dc"
+            }
+        ]
+    }
+}
