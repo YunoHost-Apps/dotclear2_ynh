@@ -15,12 +15,12 @@ fi
 admin=$3
 admin_password=$4
 is_public=$5
-directory=/var/www/$app/
+directory=/var/www/$app
 php_config=$directory/inc/config.php
 master_key=`dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d '[A-Za-z0-9]' | sed -n 's/\(.\{24\}\).*/\1/p'`
-firstname=`sudo yunohost user info $admin | grep firstname | cut -d' ' -f2 | tr -d '\n'`
-lastname=`sudo yunohost user info $admin | grep lastname | cut -d' ' -f2 | tr -d '\n'`
-email=`sudo yunohost user info $admin | grep mail | cut -d' ' -f2 | tr -d '\n'`
+firstname=`sudo yunohost user info $admin | grep firstname: | cut -d' ' -f2 | tr -d '\n'`
+lastname=`sudo yunohost user info $admin | grep lastname: | cut -d' ' -f2 | tr -d '\n'`
+email=`sudo yunohost user info $admin | grep mail: | cut -d' ' -f2 | tr -d '\n'`
 TZ=`cat /etc/timezone | tr -d '\n'`
 
 # Save app settings
@@ -41,7 +41,7 @@ sudo mkdir -p $directory
 cd $directory
 sudo wget dotclear.tgz http://download.dotclear.org/latest.tar.gz -O $app.tgz
 sudo tar xf $app.tgz
-mv dotclear $app
+sudo mv dotclear $app
 sudo rm -f $app.tgz
 sudo chown www-data:www-data -R $app
 
@@ -76,7 +76,7 @@ sudo yunohost app ssowatconf
 success=`curl -F "u_email=$EMAIL" -F "u_firstname=$FIRSTNAME" -F "u_name=$NAME" -F "u_login=$LOGIN" -F "u_pwd=$admin_password" -F "u_pwd2=$admin_password" -F "u_date=$TZ" https://$domain$path/admin/install/index.php`
 
 # Success or not success
-if [ `echo $success | grep -c success` -ge 0 ]
+if [ `echo $success | grep -c success` -gt 0 ]
 then
     echo Installation OK, $app should be available here https://$domain$path/
     exit 0
