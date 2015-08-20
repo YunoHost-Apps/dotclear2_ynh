@@ -28,7 +28,7 @@
                 },
                 "example": "/dc",
                 "default": "/dc"
-            }
+            },
             {
                 "name": "admin",
                 "ask": {
