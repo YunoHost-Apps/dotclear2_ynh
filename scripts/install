@@ -37,24 +37,18 @@ db_password=`sudo yunohost app initdb $app | tr -d '\n'`
 sudo yunohost app setting $app mysqlpwd -v $db_password
 
 # Get sources
-sudo mkdir -p $directory
-cd $directory
-sudo wget dotclear.tgz http://download.dotclear.org/latest.tar.gz -O $app.tgz
+cd /tmp
+sudo wget http://download.dotclear.org/latest.tar.gz -O $app.tgz
 sudo tar xf $app.tgz
-sudo mv dotclear $app
+sudo mkdir -p $directory
+sudo mv dotclear $directory/$app
 sudo rm -f $app.tgz
+cd $directory
+sudo cp inc/$php_config.in inc/$php_config
 sudo chown www-data:www-data -R $app
 
 # Config as if we called in admin/install/wizard.php
-sudo mv $php_config.in $php_config
-sudo sed -i -e "s;'DC_DBDRIVER','';'DC_DBDRIVER','mysqli';" \ 
-            -e "s;'DC_DBHOST','';'DC_DBHOST','localhost';" \
-            -e "s;'DC_DBUSER','';'DC_DBUSER','$app';" \
-            -e "s;'DC_DBPASSWORD','';'DC_DBPASSWORD','$db_password';" \ 
-            -e "s;'DC_DBNAME','';'DC_DBNAME','$app';" \
-            -e "s;'DC_MASTER_KEY','';'DC_MASTER_KEY','$master_key';" \
-            -e "s;'DC_ADMIN_URL','';'DC_ADMIN_URL','https://$domain$path/admin/index.php';" \
-            -e "s;'DC_ADMIN_MAILFROM','';'DC_ADMIN_MAILFROM','$email';" $php_config
+sudo sed -i -e "s;'DC_DBDRIVER','';'DC_DBDRIVER','mysqli';" -e "s;'DC_DBHOST','';'DC_DBHOST','localhost';" -e "s;'DC_DBUSER','';'DC_DBUSER','$app';" -e "s;'DC_DBPASSWORD','';'DC_DBPASSWORD','$db_password';" -e "s;'DC_DBNAME','';'DC_DBNAME','$app';" -e "s;'DC_MASTER_KEY','';'DC_MASTER_KEY','$master_key';" -e "s;'DC_ADMIN_URL','';'DC_ADMIN_URL','https://$domain$path/admin/index.php';" -e "s;'DC_ADMIN_MAILFROM','';'DC_ADMIN_MAILFROM','$email';" $php_config
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@YNH_WWW_PATH@$path@g" ../conf/nginx.conf
