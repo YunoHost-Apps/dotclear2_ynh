@@ -4,6 +4,11 @@ Currently following [this guide](https://yunohost.org/#/packaging_apps_fr) to pa
 
 # TODO
 
-- add database backup
-- add database restore
-- add database removal
+## Database
+- add backup
+- add restore
+- add removal
+
+## Install
+
+- add a 'protected' value to 'public' argument, so admin interface is protected
