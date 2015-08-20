@@ -37,6 +37,13 @@
                 "example": "johndoe"
             },
             {
+                "name": "password",
+                "ask": {
+                    "en": "Choose an admin user password"
+                },
+                "example": "verysecretpassword"
+            },
+            {
                 "name": "is_public",
                 "ask": {
                     "en": "Is it a public application ?"
