@@ -32,16 +32,16 @@
             {
                 "name": "admin",
                 "ask": {
-                    "en": "Choose an admin user"
+                    "en": "Choose a yunohost user as dotclear admin"
                 },
                 "example": "johndoe"
             },
             {
                 "name": "password",
                 "ask": {
-                    "en": "Choose an admin user password"
+                    "en": "Choose a dotclear password for this user"
                 },
-                "example": "verysecretpassword"
+                "example": "verysecret_dotclear_password"
             },
             {
                 "name": "is_public",
