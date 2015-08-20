@@ -13,14 +13,6 @@ if [[ ! $? -eq 0 ]]; then
 fi
 
 admin=$3
-
-# Check that given user is an existing yunohost user
-sudo yunohost user list | grep username | cut -d' ' -f6 | grep $admin
-if [[ ! $? -eq 1 ]]; then
-    echo "I can't find user '$admin' in yunohost's username list, installation canceled"
-    exit 2
-fi
-
 admin_password=$4
 is_public=$5
 directory=/var/www/$app/
