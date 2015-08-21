@@ -48,15 +48,6 @@ sudo chown www-data:www-data -R $directory
 # Config as if we called in admin/install/wizard.php
 sudo sed -i -e "s;'DC_DBDRIVER','';'DC_DBDRIVER','mysqli';" -e "s;'DC_DBHOST','';'DC_DBHOST','localhost';" -e "s;'DC_DBUSER','';'DC_DBUSER','$app';" -e "s;'DC_DBPASSWORD','';'DC_DBPASSWORD','$db_password';" -e "s;'DC_DBNAME','';'DC_DBNAME','$app';" -e "s;'DC_MASTER_KEY','';'DC_MASTER_KEY','$master_key';" -e "s;'DC_ADMIN_URL','';'DC_ADMIN_URL','https://$domain$path/admin/index.php';" -e "s;'DC_ADMIN_MAILFROM','';'DC_ADMIN_MAILFROM','$email';" $php_config
 
-echo ________________________________
-sudo apt-get install -y mlocate
-sudo updatedb
-locate nginx.conf
-ls -l
-ls -l *
-echo ________________________________
-
-
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@YNH_WWW_PATH@$path@g" ../conf/nginx.conf
 sed -i "s@YNH_WWW_ALIAS@$directory/@g" ../conf/nginx.conf
@@ -74,7 +65,7 @@ sudo service nginx reload
 sudo yunohost app ssowatconf
 
 # Setting first user details and filling database calling admin/install/index.php
-success=`curl --caperm /etc/yunohost/certs/$domain/ca.pem -F "u_email=$EMAIL" -F "u_firstname=$FIRSTNAME" -F "u_name=$NAME" -F "u_login=$LOGIN" -F "u_pwd=$admin_password" -F "u_pwd2=$admin_password" -F "u_date=$TZ" https://$domain$path/admin/install/index.php`
+success=`curl --cacert /etc/yunohost/certs/$domain/ca.pem -F "u_email=$EMAIL" -F "u_firstname=$FIRSTNAME" -F "u_name=$NAME" -F "u_login=$LOGIN" -F "u_pwd=$admin_password" -F "u_pwd2=$admin_password" -F "u_date=$TZ" https://$domain$path/admin/install/index.php`
 
 # Success or not success
 if [ `echo $success | grep -c success` -gt 0 ]
