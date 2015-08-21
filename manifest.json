@@ -38,7 +38,7 @@
             {
                 "name": "password",
                 "ask": {
-                    "en": "Choose a dotclear password for this user"
+                    "en": "Choose a dotclear password for this user, at least 6 characters"
                 },
                 "example": "verysecret_dotclear_password"
             },
