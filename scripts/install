@@ -41,7 +41,7 @@ cd /tmp
 sudo wget http://download.dotclear.org/latest.tar.gz -O $app.tgz
 sudo tar xf $app.tgz
 sudo mkdir -p $directory
-sudo mv dotclear/. $directory/$app
+sudo mv dotclear $directory
 sudo rm -f $app.tgz
 cd $directory
 sudo cp inc/$php_config.in inc/$php_config
