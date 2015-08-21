@@ -4,8 +4,12 @@ Currently following [this guide](https://yunohost.org/#/packaging_apps_fr) to pa
 
 # TODO
 
-- Test backup
-- Test restore
 - Add a 'protected' value to 'public' argument, so admin interface is protected
 - Replace 'password' argument by http_auth or ldap authent
 
+# Backup & Restore
+
+Default YunoHost installation got a small bug that prevent `yunohost backup create`, here's the fix: `sed -i -e "302s/logging/logger/" /usr/lib/moulinette/yunohost/backup.py`
+
+Yet it doesn't seems to save apps, at least in my test environment. To be investigated.
+    

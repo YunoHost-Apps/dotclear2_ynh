@@ -29,13 +29,12 @@ sudo yunohost app setting $app admin -v "$admin"
 sudo yunohost app setting $app admin_password -v "$admin_password"
 sudo yunohost app setting $app is_public -v "$is_public"
 
-
 # Make sure we got the tools we need for this install
 sudo apt-get install -y curl wget sed
 
 # Initialize database and store mysql password for upgrade
 db_password=`sudo yunohost app initdb $app | tr -d '\n'`
-sudo yunohost app setting $app mysqlpwd -v $db_password
+sudo yunohost app setting $app db_password -v $db_password
 
 # Get sources
 sudo wget -nv http://download.dotclear.org/latest.tar.gz -O $app.tgz
