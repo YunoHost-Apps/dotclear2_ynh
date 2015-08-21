@@ -6,9 +6,10 @@ domain=$1
 path=$2
 
 # Check domain/path availability asap
-sudo yunohost app checkurl $domain$path -a $app
-if [[ ! $? -eq 0 ]]; then
-    echo "This $domain$path is already in use, installation canceled"
+check=`sudo yunohost app checkurl $domain$path -a $app`
+if [ ! $? -eq 0 ]
+then
+    echo $check
     exit 1
 fi
 
