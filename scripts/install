@@ -1,7 +1,7 @@
 #!/bin/bash
 # DotClear 2 installation script for YunoHost
 
-app=dotclear2_test2
+app=dotclear2
 domain=$1
 path=$2
 
