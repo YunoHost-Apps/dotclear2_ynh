@@ -7,6 +7,7 @@ app=dotclear2
 # which will be compressed afterward
 backup_dir=$1/apps/$app
 sudo mkdir -p $backup_dir
+sudo chown admin $backup_dir
 
 # Backup sources
 sudo cp -a /var/www/$app/. $backup_dir/sources

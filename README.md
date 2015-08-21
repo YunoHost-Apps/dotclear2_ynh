@@ -13,7 +13,7 @@ Here's the command which should be tested and included in a /etc/cron.daily/dotc
 
     yunohost backup create --hooks dotclear2
 
-There might be two bugs preventing this command to work. First one
+There might be two bugs preventing this command to work. First one that you may fix asap.
 
     root@debian-jessie:~# yunohost backup create
     Traceback (most recent call last):
@@ -31,11 +31,11 @@ There might be two bugs preventing this command to work. First one
     logging.info("unable to iterate over local archives: %s", str(e))
     NameError: global name 'logging' is not defined
 
-Here is the fix
+The correction to be applied
 
     sed -i -e "302s/logging/logger/" /usr/lib/moulinette/yunohost/backup.py
 
-Second one
+The second bug, that may only be fixed after a first failed backup attempt as this will create the 50-dotclear2 file
 
     root@debian-jessie:~/dotclear2_ynh# yunohost backup create --hooks dotclear2
     Exécution des scripts de sauvegarde...
@@ -44,7 +44,7 @@ Second one
     Création de l'archive de sauvegarde...
     Succès ! Sauvegarde terminée
 
-Here is the fix
+Then you can fix it
 
     chown admin /etc/yunohost/hooks.d/backup/50-dotclear2
 
