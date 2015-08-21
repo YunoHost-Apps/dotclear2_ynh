@@ -39,7 +39,7 @@ sudo yunohost app setting $app mysqlpwd -v $db_password
 
 # Get sources
 cd /tmp
-sudo wget http://download.dotclear.org/latest.tar.gz -O $app.tgz
+sudo wget -nv http://download.dotclear.org/latest.tar.gz -O $app.tgz
 sudo tar xf $app.tgz
 sudo mv dotclear $directory
 sudo rm -f $app.tgz
@@ -66,7 +66,7 @@ sudo service nginx reload
 sudo yunohost app ssowatconf
 
 # Setting first user details and filling database calling admin/install/index.php
-success=`curl -F "u_email=$EMAIL" -F "u_firstname=$FIRSTNAME" -F "u_name=$NAME" -F "u_login=$LOGIN" -F "u_pwd=$admin_password" -F "u_pwd2=$admin_password" -F "u_date=$TZ" https://$domain$path/admin/install/index.php`
+success=`curl --caperm /etc/yunohost/certs/$domain/ca.pem -F "u_email=$EMAIL" -F "u_firstname=$FIRSTNAME" -F "u_name=$NAME" -F "u_login=$LOGIN" -F "u_pwd=$admin_password" -F "u_pwd2=$admin_password" -F "u_date=$TZ" https://$domain$path/admin/install/index.php`
 
 # Success or not success
 if [ `echo $success | grep -c success` -gt 0 ]
