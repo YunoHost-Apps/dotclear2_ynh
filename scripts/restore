@@ -6,8 +6,12 @@ app=dotclear2
 # The parameter $1 is the uncompressed restore directory location
 backup_dir=$1/apps/$app
 
-# Restore sources & data
+# Restore sources
 sudo cp -a $backup_dir/sources/. /var/www/$app
+
+# Restore database
+db_password=$(sudo yunohost app setting $app db_password)
+sudo yunohost app initdb $app -p "$db_password" -s $backup_dir/dump.sql
 
 # Restore Nginx and YunoHost parameters
 sudo cp -a $backup_dir/yunohost/. /etc/yunohost/apps/$app
