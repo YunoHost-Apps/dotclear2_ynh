@@ -4,11 +4,8 @@ Currently following [this guide](https://yunohost.org/#/packaging_apps_fr) to pa
 
 # TODO
 
-## Database
-- add backup
-- add restore
-- add removal
+- Test backup
+- Test restore
+- Add a 'protected' value to 'public' argument, so admin interface is protected
+- Replace 'password' argument by http_auth or ldap authent
 
-## Install
-
-- add a 'protected' value to 'public' argument, so admin interface is protected
