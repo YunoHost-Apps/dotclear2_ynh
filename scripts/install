@@ -60,7 +60,7 @@ then
 fi
 
 # Reload Nginx and regenerate SSOwat conf
-sudo service nginx reload
+sudo /etc/init.d/nginx reload
 sudo yunohost app ssowatconf
 
 # Setting first user details and filling database calling admin/install/index.php

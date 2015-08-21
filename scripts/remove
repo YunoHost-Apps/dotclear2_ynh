@@ -20,5 +20,5 @@ sudo rm -f /etc/nginx/conf.d/$domain.d/$app.conf
 mysql -u root -p$root_pwd -e "DROP DATABASE $app ; DROP USER $app@localhost ;"
 
 # Restart services
-sudo service nginx reload
+sudo /etc/init.d/nginx reload
 sudo yunohost app ssowatconf
