@@ -26,15 +26,14 @@
                 "ask": {
                     "en": "Choose a path for DotClear 2"
                 },
-                "example": "/dc",
-                "default": "/dc"
+                "example": "/dotclear2",
+                "default": "/dotclear2"
             },
             {
                 "name": "admin",
                 "ask": {
                     "en": "Choose a yunohost user as dotclear admin"
-                },
-                "example": "johndoe"
+                }
             },
             {
                 "name": "password",
