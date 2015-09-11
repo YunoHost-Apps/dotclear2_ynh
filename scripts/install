@@ -51,21 +51,20 @@ sudo sed -i -e "s;'DC_DBDRIVER','';'DC_DBDRIVER','mysqli';" -e "s;'DC_DBHOST',''
 sed -i "s@YNH_WWW_PATH@$path@g" ../conf/nginx.conf
 sed -i "s@YNH_WWW_ALIAS@$directory/@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
-
-# If app is public, add url to SSOWat conf as skipped_uris
-if [ "$is_public" = "Yes" ];
-then
-  # unprotected_uris allows SSO credentials to be passed anyway.
-  sudo yunohost app setting $app unprotected_uris -v "/"
-fi
+sudo /etc/init.d/nginx reload
 
 # Setting first user details and filling database calling admin/install/index.php
 success=`curl -L --cacert /etc/yunohost/certs/$domain/ca.pem -F "u_email=$email" -F "u_firstname=$firstname" -F "u_name=$lastname" -F "u_login=$admin" -F "u_pwd=$admin_password" -F "u_pwd2=$admin_password" -F "u_date=$timezone" https://$domain$path/admin/install/index.php`
 # success=`curl -L --cacert /etc/yunohost/certs/$domain/ca.pem -H 'Host: $domain' -X POST --data '?u_email=$EMAIL&u_firstname=$FIRSTNAME&u_name=$NAME&u_login=$LOGIN&u_pwd=$admin_password&u_pwd2=$admin_password&u_date=$timezone' https://$domain$path/admin/install/index.php`
 
 # Now that we curl'ed the setup we can lock the UI if it's private
-# Reload Nginx and regenerate SSOwat conf
-sudo /etc/init.d/nginx reload
+# If app is public, add url to SSOWat conf as skipped_uris
+if [ "$is_public" = "Yes" ];
+then
+  # unprotected_uris allows SSO credentials to be passed anyway.
+  sudo yunohost app setting $app unprotected_uris -v "/"
+fi
+# Regenerate SSOwat conf
 sudo yunohost app ssowatconf
 
 # Success or not success
