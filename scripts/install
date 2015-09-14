@@ -53,19 +53,22 @@ sed -i "s@YNH_WWW_ALIAS@$directory/@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
 sudo /etc/init.d/nginx reload
 
+# Removing protection like a public app to finish installation
+sudo yunohost app setting $app unprotected_uris -v "/"
+sudo yunohost app ssowatconf
+
 # Setting first user details and filling database calling admin/install/index.php
 success=`curl -L --cacert /etc/yunohost/certs/$domain/ca.pem -F "u_email=$email" -F "u_firstname=$firstname" -F "u_name=$lastname" -F "u_login=$admin" -F "u_pwd=$admin_password" -F "u_pwd2=$admin_password" -F "u_date=$timezone" https://$domain$path/admin/install/index.php`
 # success=`curl -L --cacert /etc/yunohost/certs/$domain/ca.pem -H 'Host: $domain' -X POST --data '?u_email=$EMAIL&u_firstname=$FIRSTNAME&u_name=$NAME&u_login=$LOGIN&u_pwd=$admin_password&u_pwd2=$admin_password&u_date=$timezone' https://$domain$path/admin/install/index.php`
 
 # Now that we curl'ed the setup we can lock the UI if it's private
-# If app is public, add url to SSOWat conf as skipped_uris
-if [ "$is_public" = "Yes" ];
+# If app is public, leave as it is
+if [ "$is_public" = "No" ];
 then
   # unprotected_uris allows SSO credentials to be passed anyway.
-  sudo yunohost app setting $app unprotected_uris -v "/"
+  sudo yunohost app setting $app protected_uris -v "/"
+  sudo yunohost app ssowatconf
 fi
-# Regenerate SSOwat conf
-sudo yunohost app ssowatconf
 
 # Success or not success
 if [ `echo $success | grep -c success` -gt 0 ]
