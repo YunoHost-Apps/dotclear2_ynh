@@ -1,19 +1,23 @@
 # DotClear 2 app for YunoHost
 
-Currently following [this guide](https://yunohost.org/#/packaging_apps_fr) to package DotClear2 blog for YunoHost, along with [the example](https://github.com/YunoHost/example_ynh).
+[DotClear2](http://dotclear.org/) package for [Yunohost](https://yunohost.org/#/)
 
 # TODO
 
 - Add a 'protected' value to 'public' argument, so admin interface is protected
 - Replace 'password' argument by http_auth or ldap authent
 
-# Backup 
+# Backup and restore
 
-Here's the command which should be tested and included in a /etc/cron.daily/dotclear2 script. Until Yunohost do allow user to manage backup through WebUI.
+YunoHost backup & restore is not stable yet, you've to save your blog yourself and make sure you know how to restore it.
 
-    yunohost backup create --hooks dotclear2
+## Backup
 
-There might be two bugs preventing this command to work. First one that you may fix asap.
+In a root:root 750 /etc/cron.daily/yunohost script. 
+
+    yunohost backup create
+
+Note, do not use --hooks option, archives produced can't seems to be restored? And there will be two bugs preventing this command to work on a brand new YunoHost installation as of 09/2015. First one that you may fix asap.
 
     root@debian-jessie:~# yunohost backup create
     Traceback (most recent call last):
@@ -31,7 +35,7 @@ There might be two bugs preventing this command to work. First one that you may 
     logging.info("unable to iterate over local archives: %s", str(e))
     NameError: global name 'logging' is not defined
 
-The correction to be applied
+The fix
 
     sed -i -e "302s/logging/logger/" /usr/lib/moulinette/yunohost/backup.py
 
@@ -48,26 +52,6 @@ Then you can fix it
 
     chown admin /etc/yunohost/hooks.d/backup/50-dotclear2
 
-Here is an example of a proper backup
+## Restore
 
-    root@debian-jessie:~/dotclear2_ynh# yunohost backup create --hooks dotclear2
-    Exécution des scripts de sauvegarde...
-    Exécution du script...
-    + app=dotclear2
-    + backup_dir=/home/yunohost.backup/tmp/1440164746/apps/dotclear2
-    + sudo mkdir -p /home/yunohost.backup/tmp/1440164746/apps/dotclear2
-    + sudo cp -a /var/www/dotclear2/. /home/yunohost.backup/tmp/1440164746/apps/dotclear2/sources
-    ++ sudo yunohost app setting dotclear2 db_password
-    + db_password=zLiS4XNmfYUk
-    + sudo mysqldump -u dotclear2 -pzLiS4XNmfYUk dotclear2
-    50-dotclear2: ligne 16: /home/yunohost.backup/tmp/1440164746/apps/dotclear2/dump.sql: Permission non accordée
-    + sudo cp -a /etc/yunohost/apps/dotclear2/. /home/yunohost.backup/tmp/1440164746/apps/dotclear2/yunohost
-    ++ sudo yunohost app setting dotclear2 domain
-    + domain=vagrant.test
-    + sudo cp -a /etc/nginx/conf.d/vagrant.test.d/dotclear2.conf /home/yunohost.backup/tmp/1440164746/apps/dotclear2/nginx.conf
-    Création de l'archive de sauvegarde...
-    Succès ! Sauvegarde terminée
-
-# Restore
-
-
+Second bug and its fix also apply to restore script, /etc/yunohost/hooks.d/restore/50-dotclear. DotClear2 restore don't work so far. 

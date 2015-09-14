@@ -74,9 +74,8 @@ fi
 if [ `echo $success | grep -c success` -gt 0 ]
 then
     echo Installation OK, $app should be available here https://$domain$path/
-    exit 0
 else
     echo Using curl to finish setup failed, open https://$domain$path/admin/install/index.php and do it yourself 
-    exit 10
 fi
+exit 0
 
