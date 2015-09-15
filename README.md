@@ -7,6 +7,15 @@
 - Add a 'protected' value to 'public' argument, so admin interface is protected
 - Replace 'password' argument by http_auth or ldap authent
 
+# Problème connu
+
+Dans le panneau d'administration, le sous menu Utilisateurs affiche ce message d'erreur
+
+    1038 Out of sort memory, consider increasing sort buffer size
+    
+Pour corriger se connecter au serveur, éditer `/etc/mysql/my.cnf` et mettre `sort_buffer_size = 256K`. Puis `service mysql restart`
+
+
 # Backup and restore
 
 YunoHost backup & restore is not stable yet, you've to save your blog yourself and make sure you know how to restore it.
