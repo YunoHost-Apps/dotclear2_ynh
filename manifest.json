@@ -16,6 +16,7 @@
         "install" : [
             {
                 "name": "domain",
+                 "type": "domain",
                 "ask": {
                     "en": "Choose a domain for DotClear 2"
                 },
@@ -23,6 +24,7 @@
             },
             {
                 "name": "path",
+                 "type": "path",
                 "ask": {
                     "en": "Choose a path for DotClear 2"
                 },
@@ -31,6 +33,7 @@
             },
             {
                 "name": "admin",
+                 "type": "user",
                 "ask": {
                     "en": "Choose a yunohost user as dotclear admin"
                 }
@@ -44,6 +47,7 @@
             },
             {
                 "name": "is_public",
+                 "type": "boolean",
                 "ask": {
                     "en": "Is it a public application ?"
                 },
