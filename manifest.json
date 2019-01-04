@@ -51,8 +51,8 @@
                 "ask": {
                     "en": "Is it a public application ?"
                 },
-                "choices": ["Yes", "No"],
-                "default": "Yes"
+                "choices": ["yes", "no"],
+                "default": "yes"
             }
         ]
     }
