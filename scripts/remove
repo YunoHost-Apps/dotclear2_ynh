@@ -1,24 +1,59 @@
 #!/bin/bash
-# DotClear 2 remove script for YunoHost
 
-app=dotclear2
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
+app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
-domain=$(sudo yunohost app setting $app domain)
-path=$(sudo yunohost app setting $app path)
-admin=$(sudo yunohost app setting $app admin)
-is_public=$(sudo yunohost app setting $app is_public)
-root_pwd=$(sudo cat /etc/yunohost/mysql)
+domain=$(ynh_app_setting_get $app domain)
+db_name=$(ynh_app_setting_get $app db_name)
+db_user=$db_name
+final_path=$(ynh_app_setting_get $app final_path)
 
-# Remove sources
-sudo rm -rf /var/www/$app
+#=================================================
+# REMOVE THE MYSQL DATABASE
+#=================================================
 
-# Remove configuration files
-sudo rm -f /etc/nginx/conf.d/$domain.d/$app.conf
+# Remove a database if it exists, along with the associated user
+ynh_mysql_remove_db $db_user $db_name
 
-# Remove database
-mysql -u root -p$root_pwd -e "DROP DATABASE $app ; DROP USER $app@localhost ;"
+#=================================================
+# REMOVE APP MAIN DIR
+#=================================================
 
-# Restart services
-sudo /etc/init.d/nginx reload
-sudo yunohost app ssowatconf
+# Remove the app directory securely
+ynh_secure_remove "$final_path"
+
+#=================================================
+# REMOVE NGINX CONFIGURATION
+#=================================================
+
+# Remove the dedicated nginx config
+ynh_remove_nginx_config
+
+#=================================================
+# REMOVE PHP-FPM CONFIGURATION
+#=================================================
+
+# Remove the dedicated php-fpm config
+ynh_remove_fpm_config
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# REMOVE DEDICATED USER
+#=================================================
+
+# Delete a system user
+ynh_system_user_delete $app

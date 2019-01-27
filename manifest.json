@@ -13,10 +13,10 @@
     },
     "multi_instance": "false",
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
-                 "type": "domain",
+                "type": "domain",
                 "ask": {
                     "en": "Choose a domain for DotClear 2"
                 },
@@ -24,7 +24,7 @@
             },
             {
                 "name": "path",
-                 "type": "path",
+                "type": "path",
                 "ask": {
                     "en": "Choose a path for DotClear 2"
                 },
@@ -33,21 +33,21 @@
             },
             {
                 "name": "admin",
-                 "type": "user",
+                "type": "user",
                 "ask": {
                     "en": "Choose a yunohost user as dotclear admin"
                 }
             },
             {
                 "name": "password",
+                "type": "password",
                 "ask": {
                     "en": "Choose a dotclear password for this user, at least 6 characters"
-                },
-                "example": "verysecret_dotclear_password"
+                }
             },
             {
                 "name": "is_public",
-                 "type": "boolean",
+                "type": "boolean",
                 "ask": {
                     "en": "Is it a public application ?"
                 },
