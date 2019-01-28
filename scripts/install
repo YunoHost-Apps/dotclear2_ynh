@@ -61,9 +61,9 @@ ynh_app_setting_set $app password $password
 
 db_name=$(ynh_sanitize_dbid $app)
 ynh_app_setting_set $app db_name $db_name
-ynh_mysql_setup_db $admin $db_name
+ynh_mysql_setup_db $app $db_name
 
-db_pwd=$(ynh_app_setting_get $app db_pwd)
+db_pwd=$(ynh_app_setting_get $app mysqlpwd)
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -98,8 +98,6 @@ ynh_add_fpm_config
 
 php_config=$final_path/inc/config.php
 
-echo $(ls $final_path)
-
 master_key=`dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d '[A-Za-z0-9]' | sed -n 's/\(.\{24\}\).*/\1/p'`
 firstname=`sudo yunohost user info $admin | grep firstname: | cut -d' ' -f2 | tr -d '\n'`
 lastname=`sudo yunohost user info $admin | grep lastname: | cut -d' ' -f2 | tr -d '\n'`
@@ -112,8 +110,30 @@ sudo cp $php_config.in $php_config
 sudo sed -i -e "s;'DC_DBDRIVER', '';'DC_DBDRIVER', 'mysqli';" -e "s;'DC_DBHOST', '';'DC_DBHOST', 'localhost';" -e "s;'DC_DBUSER', '';'DC_DBUSER', '$app';" -e "s;'DC_DBPASSWORD', '';'DC_DBPASSWORD', '$db_pwd';" -e "s;'DC_DBNAME', '';'DC_DBNAME', '$db_name';" -e "s;'DC_MASTER_KEY', '';'DC_MASTER_KEY', '$master_key';" -e "s;'DC_ADMIN_URL', '';'DC_ADMIN_URL', 'https://$domain$path_url/admin/index.php';" -e "s;'DC_ADMIN_MAILFROM', '';'DC_ADMIN_MAILFROM', '$email';" $php_config
 # Modify Nginx configuration file and copy it to Nginx conf directory
 
-# Setting first user details and filling database calling admin/install/index.php
-success=`curl -L --cacert /etc/yunohost/certs/$domain/ca.pem -F "u_email=$email" -F "u_firstname=$firstname" -F "u_name=$lastname" -F "u_login=$admin" -F "u_pwd=$password" -F "u_pwd2=$password" -F "u_date=$timezone" https://$domain$path_url/admin/install/index.php`
+#=================================================
+# SETUP APPLICATION WITH CURL
+#=================================================
+
+# Set right permissions for curl install
+chown -R $app: $final_path
+
+# Set the app as temporarily public for curl call
+ynh_app_setting_set $app skipped_uris "/"
+
+# Reload SSOwat config
+yunohost app ssowatconf
+
+# Reload Nginx
+systemctl reload nginx
+
+# Installation with curl
+ynh_local_curl "/admin/install/index.php" "u_email=$email" "u_firstname=$firstname" "u_name=$lastname" "u_login=$admin" "u_pwd=$password" "u_pwd2=$password"
+
+# Remove the public access
+if [ $is_public -eq 0 ]
+then
+	ynh_app_setting_delete $app skipped_uris
+fi
 
 #=================================================
 # SETUP SSOWAT
