@@ -150,4 +150,5 @@ fi
 # RELOAD NGINX
 #=================================================
 
+systemctl reload php7.0-fpm
 systemctl reload nginx
