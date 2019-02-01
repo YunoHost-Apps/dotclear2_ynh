@@ -1,17 +1,25 @@
 {
     "name": "DotClear 2",
     "id": "dotclear2",
+    "packaging_format": 1,
     "description": {
         "en": "Blog publishing application",
         "fr": "Moteur de blog"
     },
-    "license": "GPL-3",
+    "version": "2.14.3~ynh1",
+    "license": "GPL-2.0-or-later",
+    "url": "https://dotclear.org/",
     "maintainer": {
         "name": "rgarrigue",
         "email": "remy.garrigue@gmail.com",
         "url": "http://garrigue.re"
     },
-    "multi_instance": "false",
+    "multi_instance": true,
+    "services": [
+        "nginx",
+        "php7.0-fpm",
+        "mysql"
+    ],
     "arguments": {
         "install": [
             {
