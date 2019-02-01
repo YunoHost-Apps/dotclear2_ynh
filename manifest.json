@@ -14,6 +14,9 @@
         "email": "remy.garrigue@gmail.com",
         "url": "http://garrigue.re"
     },
+    "requirements": {
+        "yunohost": ">= 3.2.0"
+    },
     "multi_instance": true,
     "services": [
         "nginx",
