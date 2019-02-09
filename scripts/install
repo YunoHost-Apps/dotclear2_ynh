@@ -6,8 +6,8 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source _common.sh
 source /usr/share/yunohost/helpers
+source _common.sh
 
 #=================================================
 # MANAGE SCRIPT FAILURE
@@ -98,16 +98,34 @@ ynh_add_fpm_config
 php_config=$final_path/inc/config.php
 
 master_key=$(dd if=/dev/urandom bs=1 count=200 2>/dev/null | tr -c -d '[A-Za-z0-9]' | sed -n 's/\(.\{24\}\).*/\1/p')
-firstname=$(sudo yunohost user info $admin | grep firstname: | cut -d' ' -f2 | tr -d '\n')
-lastname=$(sudo yunohost user info $admin | grep lastname: | cut -d' ' -f2 | tr -d '\n')
-email=$(sudo yunohost user info $admin | grep mail: | cut -d' ' -f2 | tr -d '\n')
+firstname=$(yunohost user info $admin | grep firstname: | cut -d' ' -f2 | tr -d '\n')
+lastname=$(yunohost user info $admin | grep lastname: | cut -d' ' -f2 | tr -d '\n')
+email=$(yunohost user info $admin | grep mail: | cut -d' ' -f2 | tr -d '\n')
 timezone=$(cat /etc/timezone | tr -d '\n')
 
-sudo cp $php_config.in $php_config
+cp $php_config.in $php_config
+
+admin_url=$(ynh_url_join $path_url admin/index.php)
 
 # Config as if we called in admin/install/wizard.php
-sudo sed -i -e "s;'DC_DBDRIVER', '';'DC_DBDRIVER', 'mysqli';" -e "s;'DC_DBHOST', '';'DC_DBHOST', 'localhost';" -e "s;'DC_DBUSER', '';'DC_DBUSER', '$app';" -e "s;'DC_DBPASSWORD', '';'DC_DBPASSWORD', '$db_pwd';" -e "s;'DC_DBNAME', '';'DC_DBNAME', '$db_name';" -e "s;'DC_MASTER_KEY', '';'DC_MASTER_KEY', '$master_key';" -e "s;'DC_ADMIN_URL', '';'DC_ADMIN_URL', 'https://$domain$path_url/admin/index.php';" -e "s;'DC_ADMIN_MAILFROM', '';'DC_ADMIN_MAILFROM', '$email';" $php_config
-# Modify Nginx configuration file and copy it to Nginx conf directory
+ynh_replace_string "'DC_DBDRIVER', ''" "'DC_DBDRIVER', 'mysqli'" $php_config
+ynh_replace_string "'DC_DBHOST', ''" "'DC_DBHOST', 'localhost'" $php_config
+ynh_replace_string "'DC_DBUSER', ''" "'DC_DBUSER', '$app'" $php_config
+ynh_replace_string "'DC_DBPASSWORD', ''" "'DC_DBPASSWORD', '$db_pwd'" $php_config
+ynh_replace_string "'DC_DBNAME', ''" "'DC_DBNAME', '$db_name'" $php_config
+ynh_replace_string "'DC_MASTER_KEY', ''" "'DC_MASTER_KEY', '$master_key'" $php_config
+ynh_replace_string "'DC_ADMIN_URL', ''" "'DC_ADMIN_URL', 'https://$domain$admin_url'" $php_config
+ynh_replace_string "'DC_ADMIN_MAILFROM', ''" "'DC_ADMIN_MAILFROM', '$email'" $php_config
+
+# Config as if we called in admin/install/wizard.php
+ynh_replace_string "'DC_DBDRIVER', ''" "'DC_DBDRIVER', 'mysqli'" $php_config
+ynh_replace_string "'DC_DBHOST', ''" "'DC_DBHOST', 'localhost'" $php_config
+ynh_replace_string "'DC_DBUSER', ''" "'DC_DBUSER', '$app'" $php_config
+ynh_replace_string "'DC_DBPASSWORD', ''" "'DC_DBPASSWORD', '$db_pwd'" $php_config
+ynh_replace_string "'DC_DBNAME', ''" "'DC_DBNAME', '$db_name'" $php_config
+ynh_replace_string "'DC_MASTER_KEY', ''" "'DC_MASTER_KEY', '$master_key'" $php_config
+ynh_replace_string "'DC_ADMIN_URL', ''" "'DC_ADMIN_URL', 'https://$domain$admin_url'" $php_config
+ynh_replace_string "'DC_ADMIN_MAILFROM', ''" "'DC_ADMIN_MAILFROM', '$email'" $php_config
 
 #=================================================
 # SETUP APPLICATION WITH CURL
@@ -127,10 +145,6 @@ systemctl reload nginx
 
 # Installation with curl
 installUrl="/admin/install/index.php"
-
-if [ "$path_url" = "/" ]; then
-	installUrl="admin/install/index.php" # Fix if app is in the root domain
-fi
 
 ynh_local_curl $installUrl "u_email=$email" "u_firstname=$firstname" "u_name=$lastname" "u_login=$admin" "u_pwd=$password" "u_pwd2=$password"
 
