@@ -41,6 +41,15 @@ ynh_local_curl () {
 	curl --silent --show-error -kL -H "Host: $domain" --resolve $domain:443:127.0.0.1 $POST_data "$full_page_url"
 }
 
+# Join several urls together
+# Return a concatenate normalized url path
+#
+# example: url_path=$(ynh_url_join $url_path /admin /index.php)
+#          ynh_url_join example admin index.php -> /example/admin/index.php
+#          ynh_url_join /example admin /index.php -> /example/admin/index.php
+#          ynh_url_join / -> /
+#
+# usage: ynh_url_join url1 url2 ...
 ynh_url_join() {
     if [ "$#" -eq 0 ]; then
         ynh_die "Illegal number of parameters"
@@ -60,6 +69,6 @@ ynh_url_join() {
         full_url=${full_url}${var}
     done
 
-    full_url=$(ynh_normalize_url_path $full_url)
+    full_url=$(ynh_normalize_url_path ${full_url:-'/'})
     echo $full_url
 }
