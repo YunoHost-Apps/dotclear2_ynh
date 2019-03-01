@@ -59,5 +59,4 @@ sudo yunohost app upgrade dotclear2 -u https://github.com/YunoHost-Apps/dotclear
 
 # TODO
 
-- Add a 'protected' value to 'public' argument, so admin interface is protected
-- Replace 'password' argument by http_auth or ldap authent
+- Add change url
