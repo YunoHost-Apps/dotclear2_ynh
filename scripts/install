@@ -169,6 +169,8 @@ ynh_app_setting_delete $app skipped_uris
 if [ $is_public -eq 1 ]; then
 	# unprotected_uris allows SSO credentials to be passed anyway.
 	ynh_app_setting_set $app unprotected_uris "/"
+	# protect admin area
+	ynh_app_setting_set $app protected_uris "/admin"
 fi
 
 #=================================================
