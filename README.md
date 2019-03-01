@@ -7,7 +7,7 @@
 If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to know how to install and enjoy it.*
 
 ## Overview
-Quick description of this app.
+Dotclear is an open-source web publishing software.
 
 **Shipped version:** 2.14.3
 
