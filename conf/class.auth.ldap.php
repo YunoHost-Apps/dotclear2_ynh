@@ -60,6 +60,16 @@ class myDcAuth extends dcAuth
                                         $cur->user_tz = 'Europe/Paris';
                                         $cur->user_default_blog = 'default';
                                         $this->sudo(array($this->core,'addUser'),$cur);
+                                        #admin "administrator"
+                                        #usage "manage their own entries and comments"
+                                        #publish "publish entries and comments"
+                                        #delete "delete entries and comments"
+                                        #contentadmin "manage all entries and comments"
+                                        #categories "manage categories"
+                                        #media "manage their own media items"
+                                        #media_admin "manage all media items"
+                                        #pages "manage pages"
+                                        #blogroll "manage blogroll"
                                         $this->sudo(array($this->core,'setUserBlogPermissions'),$user_id,'default',array('admin'=>true));
                                         $this->con->commit();
                                 }
