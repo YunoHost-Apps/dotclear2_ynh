@@ -125,6 +125,7 @@ ynh_add_fpm_config
 #=================================================
 
 cp $php_config.in $php_config
+cp ../conf/class.auth.ldap.php $final_path/inc/class.auth.ldap.php
 
 firstname=$(yunohost user info $admin | grep firstname: | cut -d' ' -f2 | tr -d '\n')
 lastname=$(yunohost user info $admin | grep lastname: | cut -d' ' -f2 | tr -d '\n')
@@ -151,6 +152,13 @@ ynh_replace_string "'DC_MASTER_KEY', ''" "'DC_MASTER_KEY', '$master_key'" $php_c
 ynh_replace_string "'DC_ADMIN_URL', ''" "'DC_ADMIN_URL', 'https://$domain$admin_url'" $php_config
 ynh_replace_string "'DC_ADMIN_MAILFROM', ''" "'DC_ADMIN_MAILFROM', '$email'" $php_config
 
+# Adding LDAP login
+cat << EOF >> $php_config
+
+\$__autoload['myDcAuth'] = dirname(__FILE__).'/class.auth.ldap.php';
+define('DC_AUTH_CLASS','myDcAuth');
+EOF
+
 # Recalculate and store the checksum of the file for the next upgrade.
 ynh_store_file_checksum "$php_config"
 
@@ -173,6 +181,8 @@ if [ $is_public -eq 1 ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway
 	ynh_app_setting_set $app unprotected_uris "/"
+	# protect admin area
+	ynh_app_setting_set $app protected_uris "/admin"
 fi
 
 #=================================================
