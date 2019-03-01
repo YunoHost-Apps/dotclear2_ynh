@@ -105,6 +105,7 @@ email=$(yunohost user info $admin | grep mail: | cut -d' ' -f2 | tr -d '\n')
 ynh_app_setting_set $app master_key $master_key
 
 cp $php_config.in $php_config
+cp ../conf/class.auth.ldap.php $final_path/inc/class.auth.ldap.php
 
 admin_url=$(ynh_url_join $path_url admin/index.php)
 
@@ -127,6 +128,13 @@ ynh_replace_string "'DC_DBNAME', ''" "'DC_DBNAME', '$db_name'" $php_config
 ynh_replace_string "'DC_MASTER_KEY', ''" "'DC_MASTER_KEY', '$master_key'" $php_config
 ynh_replace_string "'DC_ADMIN_URL', ''" "'DC_ADMIN_URL', 'https://$domain$admin_url'" $php_config
 ynh_replace_string "'DC_ADMIN_MAILFROM', ''" "'DC_ADMIN_MAILFROM', '$email'" $php_config
+
+# Adding LDAP login
+cat << EOF >> $php_config
+
+\$__autoload['myDcAuth'] = dirname(__FILE__).'/class.auth.ldap.php';
+define('DC_AUTH_CLASS','myDcAuth');
+EOF
 
 ynh_store_file_checksum $php_config
 
