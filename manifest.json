@@ -6,13 +6,12 @@
         "en": "Blog publishing application",
         "fr": "Moteur de blog"
     },
-    "version": "2.14.3~ynh1",
+    "version": "2.14.3~ynh2",
     "license": "GPL-2.0-or-later",
     "url": "https://dotclear.org/",
     "maintainer": {
-        "name": "rgarrigue",
-        "email": "remy.garrigue@gmail.com",
-        "url": "http://garrigue.re"
+        "name": "kay0u",
+        "email": "pierre@kayou.io"
     },
     "requirements": {
         "yunohost": ">= 3.2.0"
