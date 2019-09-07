@@ -1,5 +1,5 @@
-SOURCE_URL=http://download.dotclear.org/latest/dotclear-2.15.tar.gz
-SOURCE_SUM=f50762992a21ccb2a0c0c5ed2be11298
+SOURCE_URL=http://download.dotclear.org/latest/dotclear-2.15.1.tar.gz
+SOURCE_SUM=6721afc77c7ab4a3278b2fdb90561fc8
 SOURCE_SUM_PRG=md5sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
