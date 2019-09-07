@@ -88,6 +88,12 @@ ynh_backup_if_checksum_is_different "$php_config"
 ynh_secure_remove "$final_path"
 
 # Download, check integrity, uncompress and patch the source from app.src
+# In case of a new version, the url change from http://download.dotclear.org/latest/dotclear-X.X.X.tar.gz to http://download.dotclear.org/attic/dotclear-X.X.X.tar.gz
+src_url=$(grep 'SOURCE_URL=' "../conf/app.src" | cut -d= -f2-)
+if ! curl --output /dev/null --silent --head --fail "$src_url"; then
+	ynh_replace_string "latest" "attic" ../conf/app.src
+fi
+
 ynh_setup_source "$final_path"
 
 mv $final_path/dotclear/* $final_path/

@@ -69,6 +69,13 @@ db_pwd=$(ynh_app_setting_get $app mysqlpwd)
 #=================================================
 
 ynh_app_setting_set $app final_path $final_path
+
+# In case of a new version, the url change from http://download.dotclear.org/latest/dotclear-X.X.X.tar.gz to http://download.dotclear.org/attic/dotclear-X.X.X.tar.gz
+src_url=$(grep 'SOURCE_URL=' "../conf/app.src" | cut -d= -f2-)
+if ! curl --output /dev/null --silent --head --fail "$src_url"; then
+	ynh_replace_string "latest" "attic" ../conf/app.src
+fi
+
 ynh_setup_source $final_path
 
 mv $final_path/dotclear/* $final_path/
