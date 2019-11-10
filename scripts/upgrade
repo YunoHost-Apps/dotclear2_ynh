@@ -23,6 +23,7 @@ is_public=$(ynh_app_setting_get $app is_public)
 final_path=$(ynh_app_setting_get $app final_path)
 db_name=$(ynh_app_setting_get $app db_name)
 db_pwd=$(ynh_app_setting_get $app mysqlpwd)
+password=$(ynh_app_setting_get $app password)
 master_key=$(ynh_app_setting_get $app master_key)
 
 #=================================================
@@ -49,6 +50,11 @@ fi
 if [ -z $final_path ]; then
 	final_path=/var/www/$app
 	ynh_app_setting_set $app final_path $final_path
+fi
+
+# If password exists, remove it
+if [ ! -z $password ]; then
+	ynh_app_setting_delete $app password
 fi
 
 #=================================================
