@@ -29,7 +29,6 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
 admin=$YNH_APP_ARG_ADMIN
-password=$YNH_APP_ARG_PASSWORD
 
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
@@ -52,7 +51,6 @@ ynh_app_setting_set $app domain $domain
 ynh_app_setting_set $app path $path_url
 ynh_app_setting_set $app is_public $is_public
 ynh_app_setting_set $app admin $admin
-ynh_app_setting_set $app password $password
 
 #=================================================
 # CREATE A MYSQL DATABASE
@@ -105,11 +103,14 @@ ynh_add_fpm_config
 
 php_config=$final_path/inc/config.php
 
-master_key=$(dd if=/dev/urandom bs=1 count=200 2>/dev/null | tr -c -d '[A-Za-z0-9]' | sed -n 's/\(.\{24\}\).*/\1/p')
-firstname=$(yunohost user info $admin | grep firstname: | cut -d' ' -f2 | tr -d '\n')
-lastname=$(yunohost user info $admin | grep lastname: | cut -d' ' -f2 | tr -d '\n')
-email=$(yunohost user info $admin | grep mail: | cut -d' ' -f2 | tr -d '\n')
+master_key=$(ynh_string_random 30)
 ynh_app_setting_set $app master_key $master_key
+
+firstname=$(ynh_user_get_info $admin firstname)
+lastname=$(ynh_user_get_info $admin lastname)
+email=$(ynh_user_get_info $admin mail)
+
+password=$(ynh_string_random 30)
 
 cp $php_config.in $php_config
 cp ../conf/class.auth.ldap.php $final_path/inc/class.auth.ldap.php
