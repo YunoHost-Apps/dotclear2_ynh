@@ -49,7 +49,6 @@ ynh_webpath_register $app $domain $path_url
 
 ynh_app_setting_set $app domain $domain
 ynh_app_setting_set $app path $path_url
-ynh_app_setting_set $app is_public $is_public
 ynh_app_setting_set $app admin $admin
 
 #=================================================
@@ -154,10 +153,7 @@ ynh_store_file_checksum $php_config
 chown -R $app: $final_path
 
 # Set the app as temporarily public for curl call
-ynh_app_setting_set $app skipped_uris "/"
-
-# Reload SSOwat config
-yunohost app ssowatconf
+ynh_permission_update --permission "main" --remove "all_users" --add "visitors"
 
 # Reload Nginx
 systemctl reload nginx
@@ -167,19 +163,17 @@ installUrl="/admin/install/index.php"
 
 ynh_local_curl $installUrl "u_email=$email" "u_firstname=$firstname" "u_name=$lastname" "u_login=$admin" "u_pwd=$password" "u_pwd2=$password"
 
-ynh_app_setting_delete $app skipped_uris
-
 #=================================================
 # SETUP SSOWAT
 #=================================================
 
-# Make app public if necessary
-if [ $is_public -eq 1 ]; then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set $app unprotected_uris "/"
-	# protect admin area
-	ynh_app_setting_set $app protected_uris "/admin"
+if [ $is_public -eq 0 ]; then
+	ynh_permission_update --permission "main" --remove "visitors" --add "all_users"
 fi
+
+ynh_permission_create --permission "admin"
+
+ynh_permission_update --permission "admin" --add $admin
 
 #=================================================
 # RELOAD NGINX

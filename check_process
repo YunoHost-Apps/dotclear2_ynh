@@ -14,9 +14,9 @@
 		setup_private=1
 		setup_public=1
 		upgrade=1
+		upgrade=1		from_commit=f356f5b8f496f626aba3ec0f9d9c40c4cb54e7f6
 		backup_restore=1
 		multi_instance=1
-		incorrect_path=1
 		port_already_use=0
 		change_url=0
 ;;; Levels

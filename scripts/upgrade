@@ -30,13 +30,9 @@ master_key=$(ynh_app_setting_get $app master_key)
 #=================================================
 ynh_print_info "Ensuring downward compatibility..."
 
-# Fix is_public as a boolean value
-if [ "$is_public" = "Yes" ]; then
-	ynh_app_setting_set $app is_public 1
-	is_public=1
-elif [ "$is_public" = "No" ]; then
-	ynh_app_setting_set $app is_public 0
-	is_public=0
+# Delete is_public if it exists
+if [ ! -z $is_public ]; then
+	ynh_app_setting_delete --app=$app --key=is_public
 fi
 
 # If db_name doesn't exist, create it
@@ -179,15 +175,10 @@ chown -R $app: $final_path
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_print_info "Upgrading SSOwat configuration..."
 
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	# unprotected_uris allows SSO credentials to be passed anyway
-	ynh_app_setting_set $app unprotected_uris "/"
-	# protect admin area
-	ynh_app_setting_set $app protected_uris "/admin"
+if ynh_exec_warn_less ynh_permission_create --permission "admin"; then
+	ynh_print_info "Upgrading SSOwat configuration..."
+	ynh_permission_update --permission "admin" --add $admin
 fi
 
 #=================================================
