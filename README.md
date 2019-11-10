@@ -9,7 +9,7 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 ## Overview
 Dotclear is an open-source web publishing software.
 
-**Shipped version:** 2.15.1
+**Shipped version:** 2.15.2
 
 ## Screenshots
 
