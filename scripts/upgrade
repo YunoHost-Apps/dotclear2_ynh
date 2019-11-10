@@ -25,6 +25,10 @@ db_name=$(ynh_app_setting_get $app db_name)
 db_pwd=$(ynh_app_setting_get $app mysqlpwd)
 master_key=$(ynh_app_setting_get $app master_key)
 
+skipped_uris=$(ynh_app_setting_get $app skipped_uris)
+unprotected_uris=$(ynh_app_setting_get $app unprotected_uris)
+protected_uris=$(ynh_app_setting_get $app protected_uris)
+
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
@@ -45,6 +49,21 @@ fi
 if [ -z $final_path ]; then
 	final_path=/var/www/$app
 	ynh_app_setting_set $app final_path $final_path
+fi
+
+# Delete skipped_uris if it exists
+if [ ! -z $skipped_uris ]; then
+	ynh_app_setting_delete $app skipped_uris
+fi
+
+# Delete unprotected_uris if it exists
+if [ ! -z $unprotected_uris ]; then
+	ynh_app_setting_delete $app unprotected_uris
+fi
+
+# Delete protected_uris if it exists
+if [ ! -z $protected_uris ]; then
+	ynh_app_setting_delete $app protected_uris
 fi
 
 #=================================================
