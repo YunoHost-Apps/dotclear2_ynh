@@ -201,9 +201,9 @@ chown -R $app: $final_path
 # SETUP SSOWAT
 #=================================================
 
-if ynh_exec_warn_less ynh_permission_create --permission "admin"; then
+if ! ynh_permission_exists --permission "admin"; then
 	ynh_print_info "Upgrading SSOwat configuration..."
-	ynh_permission_update --permission "admin" --add $admin
+	ynh_permission_create --permission "admin" --url "/admin" --allowed $admin
 fi
 
 #=================================================
