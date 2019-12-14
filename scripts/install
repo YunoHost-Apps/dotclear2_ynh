@@ -153,7 +153,7 @@ ynh_store_file_checksum $php_config
 chown -R $app: $final_path
 
 # Set the app as temporarily public for curl call
-ynh_permission_update --permission "main" --remove "all_users" --add "visitors"
+ynh_permission_update --permission "main" --add "visitors"
 
 # Reload Nginx
 systemctl reload nginx
@@ -168,7 +168,7 @@ ynh_local_curl $installUrl "u_email=$email" "u_firstname=$firstname" "u_name=$la
 #=================================================
 
 if [ $is_public -eq 0 ]; then
-	ynh_permission_update --permission "main" --remove "visitors" --add "all_users"
+	ynh_permission_update --permission "main" --remove "visitors"
 fi
 
 ynh_permission_create --permission "admin" --url "/admin" --allowed $admin
