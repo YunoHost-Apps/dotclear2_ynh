@@ -6,7 +6,7 @@
         "en": "Blog publishing application",
         "fr": "Moteur de blog"
     },
-    "version": "2.15.1~ynh1",
+    "version": "2.15.3~ynh1",
     "license": "GPL-2.0-or-later",
     "url": "https://dotclear.org/",
     "maintainer": {
@@ -46,13 +46,6 @@
                 "type": "user",
                 "ask": {
                     "en": "Choose a yunohost user as dotclear admin"
-                }
-            },
-            {
-                "name": "password",
-                "type": "password",
-                "ask": {
-                    "en": "Choose a dotclear password for this user"
                 }
             },
             {
