@@ -126,16 +126,6 @@ ynh_replace_string "'DC_MASTER_KEY', ''" "'DC_MASTER_KEY', '$master_key'" $php_c
 ynh_replace_string "'DC_ADMIN_URL', ''" "'DC_ADMIN_URL', 'https://$domain$admin_url'" $php_config
 ynh_replace_string "'DC_ADMIN_MAILFROM', ''" "'DC_ADMIN_MAILFROM', '$email'" $php_config
 
-# Config as if we called in admin/install/wizard.php
-ynh_replace_string "'DC_DBDRIVER', ''" "'DC_DBDRIVER', 'mysqli'" $php_config
-ynh_replace_string "'DC_DBHOST', ''" "'DC_DBHOST', 'localhost'" $php_config
-ynh_replace_string "'DC_DBUSER', ''" "'DC_DBUSER', '$app'" $php_config
-ynh_replace_string "'DC_DBPASSWORD', ''" "'DC_DBPASSWORD', '$db_pwd'" $php_config
-ynh_replace_string "'DC_DBNAME', ''" "'DC_DBNAME', '$db_name'" $php_config
-ynh_replace_string "'DC_MASTER_KEY', ''" "'DC_MASTER_KEY', '$master_key'" $php_config
-ynh_replace_string "'DC_ADMIN_URL', ''" "'DC_ADMIN_URL', 'https://$domain$admin_url'" $php_config
-ynh_replace_string "'DC_ADMIN_MAILFROM', ''" "'DC_ADMIN_MAILFROM', '$email'" $php_config
-
 # Adding LDAP login
 cat << EOF >> $php_config
 
