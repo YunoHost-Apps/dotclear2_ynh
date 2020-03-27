@@ -26,28 +26,27 @@ class myDcAuth extends dcAuth
                         # Store the password
                         $cur->user_pwd = $pwd;
 
-                        # If the user exist, then we just update his password.
-                        if ($this->core->userExists($user_id))
-                        {
-                                $this->sudo(array($this->core,'updUser'),$user_id,$cur);
-                                $this->con->commit();
-                        }
-                        # If not, we create him.
-                        # In order for him to connect, 
-                        # it is necessary to give him at least
-                        # a permission "usage" on the blog "default".
-                        else
-                        {
-                                # search the user in ldap, and get infos
-                                $sr=ldap_search($ds,$racine,"uid=$user_id",array( "dn", "cn", "sn", "mail", "givenname")); # /!\ fields have to be in lowercase
-                                $info = ldap_get_entries($ds, $sr);
+			# search the user in ldap, and get infos
+			$filter="(&(|(objectclass=posixAccount))(uid=".$user_id.")(permission=cn=__APP__.admin,ou=permission,dc=yunohost,dc=org))";
+			$sr=ldap_search($ds,$racine, $filter, array("dn", "cn", "sn", "mail", "givenname")); # /!\ fields have to be in lowercase
+			$info = ldap_get_entries($ds, $sr);
 
-
-                                if ($info["count"] ==1)
-                                {
-                                        $cur->user_id = $user_id;
-                                        $cur->user_email = $info[0]['mail'][0];
-                                        $cur->user_name = $info[0]['givenname'][0];
+			if ($info["count"] == 1)
+			{
+				# If the user exist, then we just update his password.
+				if ($this->core->userExists($user_id))
+				{
+					$this->sudo(array($this->core,'updUser'),$user_id,$cur);
+				}
+				# If not, we create him.
+				# In order for him to connect, 
+				# it is necessary to give him at least
+				# a permission "usage" on the blog "default".
+				else
+				{
+					$cur->user_id = $user_id;
+					$cur->user_email = $info[0]['mail'][0];
+					$cur->user_name = $info[0]['givenname'][0];
                                         $cur->user_firstname = $info[0]['sn'][0];
                                         $cur->user_lang = 'fr';                         # Can change this, PR are welcome
                                         $cur->user_tz = 'Europe/Paris';                 # Can change this, PR are welcome
@@ -65,9 +64,9 @@ class myDcAuth extends dcAuth
                                         #pages "manage pages"
                                         #blogroll "manage blogroll"
                                         $this->sudo(array($this->core,'setUserBlogPermissions'),$user_id,'default',array('usage'=>true)); # Can change this, PR are welcome
-                                        $this->con->commit();
-                                }
-                        }
+				}
+				$this->con->commit();
+			}
 
                         # The previous operations proceeded without error,
                         # we can now call the parent method
