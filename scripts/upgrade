@@ -35,11 +35,6 @@ protected_uris=$(ynh_app_setting_get $app protected_uris)
 #=================================================
 ynh_print_info "Ensuring downward compatibility..."
 
-# Delete is_public if it exists
-if [ ! -z $is_public ]; then
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
 # If db_name doesn't exist, create it
 if [ -z $db_name ]; then
 	db_name=$(ynh_sanitize_dbid $app)
@@ -70,6 +65,14 @@ fi
 # If password exists, remove it
 if [ ! -z $password ]; then
 	ynh_app_setting_delete $app password
+fi
+
+# Delete is_public if it exists
+if [ ! -z $is_public ]; then
+	if [ "$is_public" = "1" ]; then
+		ynh_permission_update --permission "main" --add "visitors"
+	fi
+	ynh_app_setting_delete --app=$app --key=is_public
 fi
 
 #=================================================
