@@ -152,6 +152,7 @@ ynh_add_fpm_config
 
 cp $php_config.in $php_config
 cp ../conf/class.auth.ldap.php $final_path/inc/class.auth.ldap.php
+ynh_replace_string "__APP__" "$app" $final_path/inc/class.auth.ldap.php
 
 firstname=$(yunohost user info $admin | grep firstname: | cut -d' ' -f2 | tr -d '\n')
 lastname=$(yunohost user info $admin | grep lastname: | cut -d' ' -f2 | tr -d '\n')

@@ -113,6 +113,7 @@ password=$(ynh_string_random 30)
 
 cp $php_config.in $php_config
 cp ../conf/class.auth.ldap.php $final_path/inc/class.auth.ldap.php
+ynh_replace_string "__APP__" "$app" $final_path/inc/class.auth.ldap.php
 
 admin_url=$(ynh_url_join $path_url admin/index.php)
 
