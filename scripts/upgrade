@@ -180,7 +180,6 @@ ynh_store_file_checksum --file=$php_config
 chown -R root: $final_path
 chown -R $app $final_path/{public,cache,themes,plugins}
 
-
 #=================================================
 # SETUP SSOWAT
 #=================================================
@@ -190,6 +189,18 @@ ynh_script_progression --message="Upgrading permissions configuration..." --weig
 if ! ynh_permission_exists --permission "admin"; then
 	ynh_permission_create --permission "admin" --url "/admin" --allowed $admin
 fi
+
+#=================================================
+# UPDATING DATABASE
+#=================================================
+
+ynh_permission_update --permission "admin" --add "visitors"
+
+# Navigate to the admin panel to upgrade the database: https://dotclear.org/documentation/2.0/admin/upgrades
+adminUrl="/admin/auth.php"
+ynh_local_curl $adminUrl
+
+ynh_permission_update --permission "admin" --remove "visitors"
 
 #=================================================
 # RELOAD NGINX
