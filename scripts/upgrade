@@ -177,7 +177,9 @@ ynh_store_file_checksum --file=$php_config
 #=================================================
 
 # Set permissions on app files
-chown -R $app: $final_path
+chown -R root: $final_path
+chown -R $app $final_path/{public,cache,themes,plugins}
+
 
 #=================================================
 # SETUP SSOWAT

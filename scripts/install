@@ -163,6 +163,14 @@ ynh_local_curl $installUrl "u_email=$email" "u_firstname=$firstname" "u_name=$la
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+# Set permissions to app files
+chown -R root: $final_path
+chown -R $app $final_path/{public,cache,themes,plugins}
+
+#=================================================
 # SETUP SSOWAT
 #=================================================
 ynh_script_progression --message="Configuring permissions..."
