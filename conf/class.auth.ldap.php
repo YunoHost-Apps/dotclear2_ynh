@@ -35,6 +35,13 @@ class ldapDcAuth extends dcAuth
                                         # Store the password
                                         $cur->user_pwd = $pwd;
 
+                                        # Store informations about the user
+                                        $cur->user_id = $user_id;
+                                        $cur->user_email = $info[0]['mail'][0];
+                                        $cur->user_name = $info[0]['sn'][0];
+                                        $cur->user_firstname = $info[0]['givenname'][0];
+                                        $cur->user_displayname = $info[0]['cn'][0];
+
                                         # If the user exist, then we just update his password.
                                         if ($this->core->userExists($user_id))
                                         {
@@ -46,10 +53,6 @@ class ldapDcAuth extends dcAuth
                                         # a permission "usage" on the blog "default".
                                         else
                                         {
-                                                $cur->user_id = $user_id;
-                                                $cur->user_email = $info[0]['mail'][0];
-                                                $cur->user_name = $info[0]['givenname'][0];
-                                                $cur->user_firstname = $info[0]['sn'][0];
                                                 $cur->user_lang = 'fr';                         # Can change this, PR are welcome
                                                 $cur->user_tz = 'Europe/Paris';                 # Can change this, PR are welcome
                                                 $cur->user_default_blog = 'default';            # Can change this, PR are welcome
