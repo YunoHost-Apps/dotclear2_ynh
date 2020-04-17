@@ -171,6 +171,14 @@ chown -R root: $final_path
 chown -R $app $final_path/{public,cache,themes,plugins}
 
 #=================================================
+# SETUP FAIL2BAN
+#=================================================
+ynh_script_progression --message="Configuring fail2ban..."
+
+# Create a dedicated fail2ban config
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in /var/www/dotclear2/inc/class.auth.ldap.php .* client: <HOST>"
+
+#=================================================
 # SETUP SSOWAT
 #=================================================
 ynh_script_progression --message="Configuring permissions..."
