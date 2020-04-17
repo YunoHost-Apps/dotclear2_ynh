@@ -186,7 +186,7 @@ chown -R $app $final_path/{public,cache,themes,plugins}
 ynh_script_progression --message="Reconfiguring fail2ban..."
 
 # Create a dedicated fail2ban config
-ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in /var/www/dotclear2/inc/class.auth.ldap.php .* client: <HOST>"
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in $final_path/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path_url%/}/admin/auth.php"
 
 #=================================================
 # SETUP SSOWAT
