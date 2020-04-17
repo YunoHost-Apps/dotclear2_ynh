@@ -163,8 +163,8 @@ ynh_replace_string "__APP__" "$app" $final_path/inc/class.auth.ldap.php
 
 cat << EOF >> $php_config
 
-\$__autoload['myDcAuth'] = dirname(__FILE__).'/class.auth.ldap.php';
-define('DC_AUTH_CLASS','myDcAuth');
+\$__autoload['ldapDcAuth'] = dirname(__FILE__).'/class.auth.ldap.php';
+define('DC_AUTH_CLASS','ldapDcAuth');
 EOF
 
 # Recalculate and store the checksum of the file for the next upgrade.
