@@ -31,13 +31,18 @@ How to configure this app: by an admin panel.
 
 #### Multi-users support
 
-Are LDAP and HTTP auth supported? **Yes**  
+Are LDAP supported? **Yes**  
+Are HTTP auth supported? **No** (PR are welcome!)  
 Can the app be used by multiple users? **Yes**
 
 #### Supported architectures
 
 * x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/dotclear2%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/dotclear2/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/dotclear2%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/dotclear2/)
+
+## Limitations
+
+* Only YunoHost users can have an admin account. (PR are welcome!)
 
 **More information on the documentation page:**  
 https://yunohost.org/packaging_apps
