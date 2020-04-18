@@ -9,10 +9,10 @@ class ldapDcAuth extends dcAuth
         private $port = "389";
         private $base = "dc=yunohost,dc=org";
 
-        public function checkUser($user_id, $pwd=null, $user_key=null)
+        public function checkUser($user_id, $pwd=null, $user_key=null, $check_blog=true)
         {
                 if ($pwd == '') {
-                        return parent::checkUser($user_id, null, $user_key);
+                        return parent::checkUser($user_id, null, $user_key, $check_blog);
                 }
 
                 # LDAP connection
