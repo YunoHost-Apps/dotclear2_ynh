@@ -163,8 +163,8 @@ ynh_replace_string "__APP__" "$app" $final_path/inc/class.auth.ldap.php
 
 cat << EOF >> $php_config
 
-\$__autoload['myDcAuth'] = dirname(__FILE__).'/class.auth.ldap.php';
-define('DC_AUTH_CLASS','myDcAuth');
+\$__autoload['ldapDcAuth'] = dirname(__FILE__).'/class.auth.ldap.php';
+define('DC_AUTH_CLASS','ldapDcAuth');
 EOF
 
 # Recalculate and store the checksum of the file for the next upgrade.
@@ -177,7 +177,16 @@ ynh_store_file_checksum --file=$php_config
 #=================================================
 
 # Set permissions on app files
-chown -R $app: $final_path
+chown -R root: $final_path
+chown -R $app $final_path/{public,cache,themes,plugins}
+
+#=================================================
+# UPGRADE FAIL2BAN
+#=================================================
+ynh_script_progression --message="Reconfiguring fail2ban..."
+
+# Create a dedicated fail2ban config
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in $final_path/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path_url%/}/admin/auth.php"
 
 #=================================================
 # SETUP SSOWAT
@@ -188,6 +197,18 @@ ynh_script_progression --message="Upgrading permissions configuration..." --weig
 if ! ynh_permission_exists --permission "admin"; then
 	ynh_permission_create --permission "admin" --url "/admin" --allowed $admin
 fi
+
+#=================================================
+# UPDATING DATABASE
+#=================================================
+
+ynh_permission_update --permission "admin" --add "visitors"
+
+# Navigate to the admin panel to upgrade the database: https://dotclear.org/documentation/2.0/admin/upgrades
+adminUrl="/admin/auth.php"
+ynh_local_curl $adminUrl
+
+ynh_permission_update --permission "admin" --remove "visitors"
 
 #=================================================
 # RELOAD NGINX

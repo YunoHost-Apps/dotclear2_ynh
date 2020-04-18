@@ -128,8 +128,8 @@ ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_fil
 
 cat << EOF >> $php_config
 
-\$__autoload['myDcAuth'] = dirname(__FILE__).'/class.auth.ldap.php';
-define('DC_AUTH_CLASS','myDcAuth');
+\$__autoload['ldapDcAuth'] = dirname(__FILE__).'/class.auth.ldap.php';
+define('DC_AUTH_CLASS','ldapDcAuth');
 EOF
 
 ynh_store_file_checksum --file=$php_config
@@ -162,6 +162,22 @@ ynh_local_curl $installUrl "u_email=$email" "u_firstname=$firstname" "u_name=$la
 
 #=================================================
 # GENERIC FINALIZATION
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+# Set permissions to app files
+chown -R root: $final_path
+chown -R $app $final_path/{public,cache,themes,plugins}
+
+#=================================================
+# SETUP FAIL2BAN
+#=================================================
+ynh_script_progression --message="Configuring fail2ban..."
+
+# Create a dedicated fail2ban config
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in $final_path/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path_url%/}/admin/auth.php"
+
 #=================================================
 # SETUP SSOWAT
 #=================================================

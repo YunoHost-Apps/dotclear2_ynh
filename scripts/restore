@@ -68,13 +68,23 @@ ynh_system_user_create --username=$app
 #=================================================
 
 # Restore permissions on app files
-chown -R $app: $final_path
+chown -R root: $final_path
+chown -R $app $final_path/{public,cache,themes,plugins}
 
 #=================================================
 # RESTORE THE PHP-FPM CONFIGURATION
 #=================================================
 
 ynh_restore_file --origin_path="/etc/php/7.0/fpm/pool.d/$app.conf"
+
+#=================================================
+# RESTORE THE FAIL2BAN CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the fail2ban configuration..."
+
+ynh_restore_file --origin_path="/etc/fail2ban/jail.d/$app.conf"
+ynh_restore_file --origin_path="/etc/fail2ban/filter.d/$app.conf"
+ynh_systemd_action --action=restart --service_name=fail2ban
 
 #=================================================
 # SPECIFIC RESTORATION
