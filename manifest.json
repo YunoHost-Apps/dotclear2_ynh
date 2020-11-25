@@ -54,7 +54,7 @@
                 "ask": {
                     "en": "Is it a public application ?"
                 },
-                "default": "true"
+                "default": true
             }
         ]
     }
