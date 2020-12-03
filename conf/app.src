@@ -1,6 +1,6 @@
-SOURCE_URL=http://download.dotclear.org/latest/dotclear-2.17.2.tar.gz
-SOURCE_SUM=4247650007be7934f40924d09d519642
-SOURCE_SUM_PRG=md5sum
+SOURCE_URL=http://download.dotclear.org/latest/dotclear-2.18.tar.gz
+SOURCE_SUM=6a99672db2c20e392d776c680dc87d5bc66962e8307ecf81a63feb6c5d2f398a
+SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=2
 SOURCE_FILENAME=
