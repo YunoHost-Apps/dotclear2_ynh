@@ -20,11 +20,12 @@ ynh_abort_if_errors
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-app=$YNH_APP_INSTANCE_NAME
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
 admin=$YNH_APP_ARG_ADMIN
+
+app=$YNH_APP_INSTANCE_NAME
 
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
@@ -45,6 +46,14 @@ ynh_script_progression --message="Storing installation settings..."
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..." --weight=2
+
+# Create a system user
+ynh_system_user_create --username=$app --home_dir=$final_path
 
 #=================================================
 # CREATE A MYSQL DATABASE
@@ -73,33 +82,30 @@ fi
 
 ynh_setup_source --dest_dir="$final_path"
 
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring nginx web server..."
+ynh_script_progression --message="Configuring NGINX web server..."
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..." --weight=2
-
-# Create a system user
-ynh_system_user_create --username=$app
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring php-fpm..." --weight=2
+ynh_script_progression --message="Configuring PHP-FPM..." --weight=2
 
-# Create a dedicated php-fpm config
+# Create a dedicated PHP-FPM config
 ynh_add_fpm_config
 
 #=================================================
-# MODIFY A CONFIG FILE
+# ADD A CONFIGURATION
 #=================================================
+ynh_script_progression --message="Adding a configuration file..."
 
 php_config=$final_path/inc/config.php
 
@@ -138,11 +144,10 @@ ynh_store_file_checksum --file=$php_config
 # SETUP APPLICATION WITH CURL
 #=================================================
 
-# Set right permissions for curl install
-chown -R $app: $final_path
-
 # Set the app as temporarily public for curl call
-ynh_permission_update --permission "main" --add "visitors"
+ynh_script_progression --message="Configuring SSOwat..."
+# Making the app public for curl
+ynh_permission_update --permission="main" --add="visitors"
 
 # Reload Nginx
 ynh_systemd_action --service_name=nginx --action=reload
@@ -160,22 +165,17 @@ installUrl="/admin/install/index.php"
 
 ynh_local_curl $installUrl "u_email=$email" "u_firstname=$firstname" "u_name=$lastname" "u_login=$admin" "u_pwd=$password" "u_pwd2=$password"
 
+# Remove the public access
+ynh_permission_update --permission="main" --remove="visitors"
+
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set permissions to app files
-chown -R root: $final_path
-chown -R $app $final_path/{public,cache,themes,plugins}
-
-#=================================================
 # SETUP FAIL2BAN
 #=================================================
-ynh_script_progression --message="Configuring fail2ban..."
+ynh_script_progression --message="Configuring Fail2Ban..."
 
-# Create a dedicated fail2ban config
+# Create a dedicated Fail2Ban config
 ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in $final_path/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path_url%/}/admin/auth.php"
 
 #=================================================
@@ -183,17 +183,21 @@ ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failreg
 #=================================================
 ynh_script_progression --message="Configuring permissions..."
 
-if [ $is_public -eq 0 ]; then
-	ynh_permission_update --permission "main" --remove "visitors"
+# Make app public if necessary
+if [ $is_public -eq 1 ]
+then
+	# Everyone can access the app.
+	# The "main" permission is automatically created before the install script.
+	ynh_permission_update --permission="main" --add="visitors"
 fi
 
 # Only the admin can access the admin panel of the app (if the app has an admin panel)
-ynh_permission_create --permission "admin" --url "/admin" --allowed $admin
+ynh_permission_create --permission="admin" --url="/admin" --allowed=$admin
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..."
+ynh_script_progression --message="Reloading NGINX web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 
