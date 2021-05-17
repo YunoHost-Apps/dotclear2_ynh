@@ -140,6 +140,9 @@ EOF
 
 ynh_store_file_checksum --file=$php_config
 
+chmod 400 "$php_config"
+chown $app:$app "$php_config"
+
 #=================================================
 # SETUP APPLICATION WITH CURL
 #=================================================

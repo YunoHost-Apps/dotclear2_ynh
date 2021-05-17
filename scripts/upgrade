@@ -168,6 +168,9 @@ EOF
 # Recalculate and store the checksum of the file for the next upgrade.
 ynh_store_file_checksum --file=$php_config
 
+chmod 400 "$php_config"
+chown $app:$app "$php_config"
+
 #=================================================
 # UPDATING DATABASE
 #=================================================

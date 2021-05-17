@@ -126,6 +126,9 @@ ynh_replace_string --match_string="'DC_ADMIN_URL', 'https://$old_domain$old_admi
 
 ynh_store_file_checksum --file="$php_config"
 
+chmod 400 "$php_config"
+chown $app:$app "$php_config"
+
 #=================================================
 # GENERIC FINALISATION
 #=================================================
