@@ -6,7 +6,7 @@
         "en": "Blog publishing application",
         "fr": "Moteur de blog"
     },
-    "version": "2.18~ynh1",
+    "version": "2.18.1~ynh1",
     "license": "GPL-2.0-or-later",
     "url": "https://dotclear.org/",
     "maintainer": {
@@ -19,41 +19,30 @@
     "multi_instance": true,
     "services": [
         "nginx",
-        "php7.0-fpm",
+        "php7.3-fpm",
         "mysql"
     ],
     "arguments": {
-        "install": [
+        "install" : [
             {
                 "name": "domain",
                 "type": "domain",
-                "ask": {
-                    "en": "Choose a domain for DotClear 2"
-                },
-                "example": "domain.org"
+                "example": "example.com"
             },
             {
                 "name": "path",
                 "type": "path",
-                "ask": {
-                    "en": "Choose a path for DotClear 2"
-                },
                 "example": "/dotclear2",
                 "default": "/dotclear2"
             },
             {
                 "name": "admin",
                 "type": "user",
-                "ask": {
-                    "en": "Choose a yunohost user as dotclear admin"
-                }
+                "example": "johndoe"
             },
             {
                 "name": "is_public",
                 "type": "boolean",
-                "ask": {
-                    "en": "Is it a public application ?"
-                },
                 "default": true
             }
         ]
