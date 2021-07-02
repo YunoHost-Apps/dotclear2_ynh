@@ -42,18 +42,26 @@ ynh_secure_remove --file="$final_path"
 #=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Removing nginx web server configuration..."
+ynh_script_progression --message="Removing NGINX web server configuration..."
 
-# Remove the dedicated nginx config
+# Remove the dedicated NGINX config
 ynh_remove_nginx_config
 
 #=================================================
 # REMOVE PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Removing php-fpm configuration..."
+ynh_script_progression --message="Removing PHP-FPM configuration..."
 
-# Remove the dedicated php-fpm config
+# Remove the dedicated PHP-FPM config
 ynh_remove_fpm_config
+
+#=================================================
+# REMOVE FAIL2BAN CONFIGURATION
+#=================================================
+ynh_script_progression --message="Removing Fail2ban configuration..."
+
+# Remove the dedicated Fail2Ban config
+ynh_remove_fail2ban_config
 
 #=================================================
 # GENERIC FINALIZATION
@@ -64,14 +72,6 @@ ynh_script_progression --message="Removing the dedicated system user..."
 
 # Delete a system user
 ynh_system_user_delete --username=$app
-
-#=================================================
-# REMOVE FAIL2BAN CONFIGURATION
-#=================================================
-ynh_script_progression --message="Removing fail2ban configuration..."
-
-# Remove the dedicated fail2ban config
-ynh_remove_fail2ban_config
 
 #=================================================
 # END OF SCRIPT
