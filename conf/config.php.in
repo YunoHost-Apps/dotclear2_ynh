@@ -18,7 +18,7 @@ define('DC_DBHOST', 'localhost');
 define('DC_DBUSER', '__DB_USER__');
 
 // Database password
-define('DC_DBPASSWORD', '__DB_PASSWORD__');
+define('DC_DBPASSWORD', '__DB_PWD__');
 
 // Database name
 define('DC_DBNAME', '__DB_NAME__');
