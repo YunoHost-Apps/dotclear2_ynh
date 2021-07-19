@@ -143,27 +143,15 @@ ynh_script_progression --message="Updating a configuration file..."
 
 php_config=$final_path/inc/config.php
 
-ynh_backup_if_checksum_is_different --file=$php_config
-
-cp $php_config.in $php_config
-
 admin_url="${path_url%/}/admin/index.php"
-
+file=__FILE__
 email=$(ynh_user_get_info --username=$admin --key=mail)
 
 # Config as if we called in admin/install/wizard.php
-ynh_replace_string --match_string="'DC_DBDRIVER', ''" --replace_string="'DC_DBDRIVER', 'mysqli'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_DBHOST', ''" --replace_string="'DC_DBHOST', 'localhost'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_DBUSER', ''" --replace_string="'DC_DBUSER', '$db_user'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_DBPASSWORD', ''" --replace_string="'DC_DBPASSWORD', '$db_pwd'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_DBNAME', ''" --replace_string="'DC_DBNAME', '$db_name'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_MASTER_KEY', ''" --replace_string="'DC_MASTER_KEY', '$master_key'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_ADMIN_URL', ''" --replace_string="'DC_ADMIN_URL', 'https://$domain$admin_url'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_ADMIN_MAILFROM', ''" --replace_string="'DC_ADMIN_MAILFROM', '$email'" --target_file=$php_config
+ynh_add_config --template="../conf/config.php.in" --destination="$php_config"
 
 # Adding LDAP login
-cp ../conf/class.auth.ldap.php $final_path/inc/class.auth.ldap.php
-ynh_replace_string "__APP__" "$app" $final_path/inc/class.auth.ldap.php
+ynh_add_config --template="../conf/class.auth.ldap.php" --destination="$final_path/inc/class.auth.ldap.php"
 
 cat << EOF >> $php_config
 
@@ -171,11 +159,8 @@ cat << EOF >> $php_config
 define('DC_AUTH_CLASS','ldapDcAuth');
 EOF
 
-# Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum --file=$php_config
-
 chmod 400 "$php_config"
-chown $app:$app "$php_config"
+chown $app "$php_config"
 
 #=================================================
 # UPDATING DATABASE
