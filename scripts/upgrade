@@ -29,9 +29,26 @@ master_key=$(ynh_app_setting_get --app=$app --key=master_key)
 #=================================================
 # CHECK VERSION
 #=================================================
+ynh_script_progression --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
 
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=4
+
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+	# Restore it if the upgrade fails
+	ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# STANDARD UPGRADE STEPS
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
@@ -66,33 +83,22 @@ if [ -n "$is_public" ]; then
 	ynh_app_setting_delete --app=$app --key=is_public
 fi
 
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=4
-
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	# restore it if the upgrade fails
-	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+if ! ynh_permission_exists --permission="admin"; then
+	# Create the required permissions
+	ynh_permission_create --permission="admin" --url="/admin" --allowed=$admin
+fi
 
 #=================================================
-# CHECK THE PATH
+# CREATE DEDICATED USER
 #=================================================
+ynh_script_progression --message="Making sure dedicated system user exists..."
 
-# Normalize the URL path syntax
-path_url=$(ynh_normalize_url_path --path_url=$path_url)
+# Create a dedicated user (if not existing)
+ynh_system_user_create --username=$app --home_dir=$final_path
 
-#=================================================
-# STANDARD UPGRADE STEPS
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Upgrading source files..." --weight=4
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
@@ -102,40 +108,38 @@ then
 	if ! curl --output /dev/null --silent --head --fail "$src_url"; then
 		ynh_replace_string "latest" "attic" ../conf/app.src
 	fi
+	ynh_script_progression --message="Upgrading source files..."
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path"
 fi
 
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading nginx web server configuration..."
+ynh_script_progression --message="Upgrading NGINX web server configuration..."
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..."
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading php-fpm configuration..." --weight=2
+ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
 
-# Create a dedicated php-fpm config
+# Create a dedicated PHP-FPM config
 ynh_add_fpm_config
 
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
-# MODIFY A CONFIG FILE
+# UPDATE A CONFIG FILE
 #=================================================
+ynh_script_progression --message="Updating a configuration file..."
 
 php_config=$final_path/inc/config.php
 
@@ -170,33 +174,8 @@ EOF
 # Recalculate and store the checksum of the file for the next upgrade.
 ynh_store_file_checksum --file=$php_config
 
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set permissions on app files
-chown -R root: $final_path
-chown -R $app $final_path/{public,cache,themes,plugins}
-
-#=================================================
-# UPGRADE FAIL2BAN
-#=================================================
-ynh_script_progression --message="Reconfiguring fail2ban..."
-
-# Create a dedicated fail2ban config
-ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in $final_path/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path_url%/}/admin/auth.php"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Upgrading permissions configuration..." --weight=2
-
-# Create the admin permission if needed
-if ! ynh_permission_exists --permission "admin"; then
-	ynh_permission_create --permission "admin" --url "/admin" --allowed $admin
-fi
+chmod 400 "$php_config"
+chown $app:$app "$php_config"
 
 #=================================================
 # UPDATING DATABASE
@@ -211,9 +190,19 @@ ynh_local_curl $adminUrl
 ynh_permission_update --permission "admin" --remove "visitors"
 
 #=================================================
+# GENERIC FINALIZATION
+#=================================================
+# UPGRADE FAIL2BAN
+#=================================================
+ynh_script_progression --message="Reconfiguring Fail2Ban..."
+
+# Create a dedicated Fail2Ban config
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in $final_path/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path_url%/}/admin/auth.php"
+
+#=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..."
+ynh_script_progression --message="Reloading NGINX web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 
