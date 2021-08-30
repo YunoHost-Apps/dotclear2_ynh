@@ -114,7 +114,7 @@ master_key=$(ynh_string_random --length=30)
 ynh_app_setting_set --app=$app --key=master_key --value=$master_key
 
 admin_url="${path_url%/}/admin/index.php"
-file=__FILE__
+file="__FILE__"
 email=$(ynh_user_get_info --username=$admin --key=mail)
 
 # Config as if we called in admin/install/wizard.php
