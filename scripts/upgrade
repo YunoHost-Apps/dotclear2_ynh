@@ -202,9 +202,10 @@ ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failreg
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
+ynh_script_progression --message="Reloading NGINX web server and PHP-FRM..."
 
 ynh_systemd_action --service_name=nginx --action=reload
+ynh_systemd_action --service_name=php$YNH_PHP_VERSION-fpm --action=reload
 
 #=================================================
 # END OF SCRIPT
