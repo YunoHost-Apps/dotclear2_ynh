@@ -120,8 +120,8 @@ php_config=$final_path/inc/config.php
 
 ynh_backup_if_checksum_is_different --file="$php_config"
 
-new_admin_url="${new_path%/}/admin/index.php"
-old_admin_url="${old_path%/}/admin/index.php"
+new_admin_url="${new_path%/}/admin/"
+old_admin_url="${old_path%/}/admin/"
 ynh_replace_string --match_string="'DC_ADMIN_URL', 'https://$old_domain$old_admin_url'" --replace_string="'DC_ADMIN_URL', 'https://$new_domain$new_admin_url'" --target_file=$php_config
 
 ynh_store_file_checksum --file="$php_config"
