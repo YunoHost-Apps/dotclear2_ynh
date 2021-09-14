@@ -115,7 +115,7 @@ ynh_app_setting_set --app=$app --key=master_key --value=$master_key
 
 cp $php_config.in $php_config
 
-admin_url="${path_url%/}/admin/index.php"
+admin_url="${path_url%/}/admin/"
 
 email=$(ynh_user_get_info --username=$admin --key=mail)
 
