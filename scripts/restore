@@ -69,6 +69,10 @@ chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
 
+# https://dotclear.org/documentation/2.0/admin/install
+mkdir -p "$final_path/"{cache,public}
+setfacl -m d:u:www-data:rwx "$final_path/"{cache,public}
+
 #=================================================
 # RESTORE THE PHP-FPM CONFIGURATION
 #=================================================
