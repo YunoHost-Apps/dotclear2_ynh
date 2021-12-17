@@ -66,9 +66,7 @@ if [ -z "$final_path" ]; then
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
-is_public=$(ynh_app_setting_get --app=$app --key=is_public)
-
-if [ -n "$is_public" ]; then
+if [ -n "$(ynh_app_setting_get --app=$app --key=is_public)" ]; then
 	ynh_app_setting_delete --app=$app --key=protected_uris
 
 	# Removing skipped/unprotected_uris under certain conditions, remove the visitors group added during the migration process of 3.7
