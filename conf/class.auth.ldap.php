@@ -22,9 +22,6 @@ class ldapDcAuth extends dcAuth
                         ldap_set_option ($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
                         if (ldap_bind($ds, "uid=".$user_id.",ou=users,".$this->base, $pwd))
                         {
-                                # user_id needs to be in lowercase here
-                                $user_id = strtolower($user_id);
-
                                 # search the user in ldap, and get infos
                                 $filter = "(&(|(objectclass=posixAccount))(uid=".$user_id.")(permission=cn=__APP__.admin,ou=permission,".$this->base."))";
                                 $sr = ldap_search($ds, $this->base, $filter, array("dn", "cn", "sn", "mail", "givenname")); # /!\ fields have to be in lowercase
@@ -32,6 +29,11 @@ class ldapDcAuth extends dcAuth
 
                                 if ($info["count"] == 1)
                                 {
+                                        # To be case sensitive
+                                        if ($info[0]['dn'] != "uid=".$user_id.",ou=users,".$this->base) {
+                                                return parent::checkUser($user_id, $pwd);
+                                        }
+                                        
                                         try
                                         {
                                                 $this->con->begin();
@@ -119,7 +121,7 @@ class ldapDcAuth extends dcAuth
                                 error_log("Failed to connect with the user ".$user_id);
                         }
                 }
-                return parent::checkUser($user_id, $pwd);   
+                return parent::checkUser($user_id, $pwd);
         }
 }
 ?>
