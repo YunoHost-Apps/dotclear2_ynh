@@ -1,0 +1,119 @@
+version = "1.0"
+
+[main]
+name = "Dotclear2 configuration"
+
+    [main.super_user]
+    name = "Main permission for YunoHost users"
+
+        [main.super_user.admin]
+        ask = "Super Administrator"
+        type = "user"
+        bind = "super_user:__FINALPATH__/inc/class.auth.ldap.php"
+
+[ynh_users]
+name = "Yunohost users"
+
+    [ynh_users.main_permission]
+    name = "Permissions for YunoHost users"
+
+        [ynh_users.main_permission.blog_admin]
+        ask = "Administrator"
+        type = "boolean"
+        yes = "true"
+        no = "false"
+        bind = "'admin':__FINALPATH__/inc/class.auth.ldap.php"
+
+        [ynh_users.content]
+        name = "Content permissions"
+        visible = "!blog_admin"
+            
+            [ynh_users.content.blog_contentadmin]
+            ask = "Manage all entries and comments"
+            type = "boolean"
+            yes = "true"
+            no = "false"
+            bind = "'contentadmin':__FINALPATH__/inc/class.auth.ldap.php"
+
+            [ynh_users.content.blog_usage]
+            ask = "Manage their own entries and comments"
+            type = "boolean"
+            yes = "true"
+            no = "false"
+            bind = "'usage':__FINALPATH__/inc/class.auth.ldap.php"
+            visible = "!blog_contentadmin"
+
+            [ynh_users.content.blog_publish]
+            ask = "Publish entries and comments"
+            type = "boolean"
+            yes = "true"
+            no = "false"
+            bind = "'publish':__FINALPATH__/inc/class.auth.ldap.php"
+            visible = "!blog_contentadmin"
+
+            [ynh_users.content.blog_delete]
+            ask = "Delete entries and comments"
+            type = "boolean"
+            yes = "true"
+            no = "false"
+            bind = "'delete':__FINALPATH__/inc/class.auth.ldap.php"
+            visible = "!blog_contentadmin"
+
+        [ynh_users.media]
+        name = "Media permissions"
+        visible = "!blog_admin"
+
+            [ynh_users.media.blog_media_admin]
+            ask = "Manage all media items"
+            type = "boolean"
+            yes = "true"
+            no = "false"
+            bind = "'media_admin':__FINALPATH__/inc/class.auth.ldap.php"
+
+            [ynh_users.media.blog_media]
+            ask = "Manage their own media items"
+            type = "boolean"
+            yes = "true"
+            no = "false"
+            bind = "'media':__FINALPATH__/inc/class.auth.ldap.php"
+            visible = "!blog_media_admin"
+
+        [ynh_users.other_permissions]
+        name = "Other permissions"
+        visible = "!blog_admin"
+
+            [ynh_users.other_permissions.blog_categories]
+            ask = "Manage categories"
+            type = "boolean"
+            yes = "true"
+            no = "false"
+            bind = "'categories':__FINALPATH__/inc/class.auth.ldap.php"
+
+            [ynh_users.other_permissions.blog_pages]
+            ask = "Manage pages"
+            type = "boolean"
+            yes = "true"
+            no = "false"
+            bind = "'pages':__FINALPATH__/inc/class.auth.ldap.php"
+
+            [ynh_users.other_permissions.blog_blogroll]
+            ask = "Manage blogroll"
+            type = "boolean"
+            yes = "true"
+            no = "false"
+            bind = "'blogroll':__FINALPATH__/inc/class.auth.ldap.php"
+
+
+
+
+
+# admin "administrator"
+#   contentadmin "manage all entries and comments"
+#     usage "manage their own entries and comments"
+#     publish "publish entries and comments"
+#     delete "delete entries and comments"
+#   categories "manage categories"
+#   media_admin "manage all media items"
+#     media "manage their own media items"
+#   pages "manage pages"
+#   blogroll "manage blogroll"
