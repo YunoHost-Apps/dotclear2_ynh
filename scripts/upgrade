@@ -26,6 +26,17 @@ db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 password=$(ynh_app_setting_get --app=$app --key=password)
 master_key=$(ynh_app_setting_get --app=$app --key=master_key)
 
+blog_admin=$(ynh_app_setting_get --app=$app --key=blog_admin)
+blog_contentadmin=$(ynh_app_setting_get --app=$app --key=blog_contentadmin)
+blog_usage=$(ynh_app_setting_get --app=$app --key=blog_usage)
+blog_publish=$(ynh_app_setting_get --app=$app --key=blog_publish)
+blog_delete=$(ynh_app_setting_get --app=$app --key=blog_delete)
+blog_categories=$(ynh_app_setting_get --app=$app --key=blog_categories)
+blog_media_admin=$(ynh_app_setting_get --app=$app --key=blog_media_admin)
+blog_media=$(ynh_app_setting_get --app=$app --key=blog_media)
+blog_pages=$(ynh_app_setting_get --app=$app --key=blog_pages)
+blog_blogroll=$(ynh_app_setting_get --app=$app --key=blog_blogroll)
+
 #=================================================
 # CHECK VERSION
 #=================================================
@@ -84,6 +95,38 @@ fi
 if ! ynh_permission_exists --permission="admin"; then
 	# Create the required permissions
 	ynh_permission_create --permission="admin" --url="/admin" --allowed=$admin
+fi
+
+if [ -z "$blog_admin" ] ||
+ [ -z "$blog_contentadmin" ] || 
+ [ -z "$blog_usage" ] || 
+ [ -z "$blog_publish" ] || 
+ [ -z "$blog_delete" ] || 
+ [ -z "$blog_categories" ] || 
+ [ -z "$blog_media_admin" ] || 
+ [ -z "$blog_media" ] || 
+ [ -z "$blog_pages" ] || 
+ [ -z "$blog_blogroll" ]; then
+	blog_admin="false"
+	blog_contentadmin="false"
+	blog_usage="true"
+	blog_publish="false"
+	blog_delete="false"
+	blog_categories="false"
+	blog_media_admin="false"
+	blog_media="false"
+	blog_pages="false"
+	blog_blogroll="false"
+	ynh_app_setting_set --app=$app --key=blog_admin --value=$blog_admin
+	ynh_app_setting_set --app=$app --key=blog_contentadmin --value=$blog_contentadmin
+	ynh_app_setting_set --app=$app --key=blog_usage --value=$blog_usage
+	ynh_app_setting_set --app=$app --key=blog_publish --value=$blog_publish
+	ynh_app_setting_set --app=$app --key=blog_delete --value=$blog_delete
+	ynh_app_setting_set --app=$app --key=blog_categories --value=$blog_categories
+	ynh_app_setting_set --app=$app --key=blog_media_admin --value=$blog_media_admin
+	ynh_app_setting_set --app=$app --key=blog_media --value=$blog_media
+	ynh_app_setting_set --app=$app --key=blog_pages --value=$blog_pages
+	ynh_app_setting_set --app=$app --key=blog_blogroll --value=$blog_blogroll
 fi
 
 #=================================================

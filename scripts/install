@@ -134,6 +134,27 @@ ynh_replace_string --match_string="'DC_ADMIN_URL', ''" --replace_string="'DC_ADM
 ynh_replace_string --match_string="'DC_ADMIN_MAILFROM', ''" --replace_string="'DC_ADMIN_MAILFROM', '$email'" --target_file=$php_config
 
 # Adding LDAP login
+blog_admin="false"
+blog_contentadmin="false"
+blog_usage="true"
+blog_publish="false"
+blog_delete="false"
+blog_categories="false"
+blog_media_admin="false"
+blog_media="false"
+blog_pages="false"
+blog_blogroll="false"
+ynh_app_setting_set --app=$app --key=blog_admin --value=$blog_admin
+ynh_app_setting_set --app=$app --key=blog_contentadmin --value=$blog_contentadmin
+ynh_app_setting_set --app=$app --key=blog_usage --value=$blog_usage
+ynh_app_setting_set --app=$app --key=blog_publish --value=$blog_publish
+ynh_app_setting_set --app=$app --key=blog_delete --value=$blog_delete
+ynh_app_setting_set --app=$app --key=blog_categories --value=$blog_categories
+ynh_app_setting_set --app=$app --key=blog_media_admin --value=$blog_media_admin
+ynh_app_setting_set --app=$app --key=blog_media --value=$blog_media
+ynh_app_setting_set --app=$app --key=blog_pages --value=$blog_pages
+ynh_app_setting_set --app=$app --key=blog_blogroll --value=$blog_blogroll
+
 ynh_add_config --template="../conf/class.auth.ldap.php" --destination="$final_path/inc/class.auth.ldap.php"
 
 cat << EOF >> $php_config
