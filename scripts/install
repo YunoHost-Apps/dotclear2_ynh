@@ -134,8 +134,7 @@ ynh_replace_string --match_string="'DC_ADMIN_URL', ''" --replace_string="'DC_ADM
 ynh_replace_string --match_string="'DC_ADMIN_MAILFROM', ''" --replace_string="'DC_ADMIN_MAILFROM', '$email'" --target_file=$php_config
 
 # Adding LDAP login
-cp ../conf/class.auth.ldap.php $final_path/inc/class.auth.ldap.php
-ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_file="$final_path/inc/class.auth.ldap.php"
+ynh_add_config --template="../conf/class.auth.ldap.php" --destination="$final_path/inc/class.auth.ldap.php"
 
 cat << EOF >> $php_config
 
