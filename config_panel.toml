@@ -26,7 +26,7 @@ name = "Yunohost users"
 
         [ynh_users.content]
         name = "Content permissions"
-        visible = "!blog_admin"
+        visible = "blog_admin != 'true'"
             
             [ynh_users.content.blog_contentadmin]
             ask = "Manage all entries and comments"
@@ -41,7 +41,7 @@ name = "Yunohost users"
             yes = "true"
             no = "false"
             bind = "'usage':__FINALPATH__/inc/class.auth.ldap.php"
-            visible = "!blog_contentadmin"
+            visible = "blog_contentadmin != 'true'"
 
             [ynh_users.content.blog_publish]
             ask = "Publish entries and comments"
@@ -49,7 +49,7 @@ name = "Yunohost users"
             yes = "true"
             no = "false"
             bind = "'publish':__FINALPATH__/inc/class.auth.ldap.php"
-            visible = "!blog_contentadmin"
+            visible = "blog_contentadmin != 'true'"
 
             [ynh_users.content.blog_delete]
             ask = "Delete entries and comments"
@@ -57,11 +57,11 @@ name = "Yunohost users"
             yes = "true"
             no = "false"
             bind = "'delete':__FINALPATH__/inc/class.auth.ldap.php"
-            visible = "!blog_contentadmin"
+            visible = "blog_contentadmin != 'true'"
 
         [ynh_users.media]
         name = "Media permissions"
-        visible = "!blog_admin"
+        visible = "blog_admin != 'true'"
 
             [ynh_users.media.blog_media_admin]
             ask = "Manage all media items"
@@ -76,11 +76,11 @@ name = "Yunohost users"
             yes = "true"
             no = "false"
             bind = "'media':__FINALPATH__/inc/class.auth.ldap.php"
-            visible = "!blog_media_admin"
+            visible = "blog_media_admin != 'true'"
 
         [ynh_users.other_permissions]
         name = "Other permissions"
-        visible = "!blog_admin"
+        visible = "blog_admin != 'true'"
 
             [ynh_users.other_permissions.blog_categories]
             ask = "Manage categories"
