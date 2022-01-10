@@ -70,38 +70,38 @@ class ldapDcAuth extends dcAuth
                                                         $cur->user_tz = 'Europe/Paris';                 # Can change this, PR are welcome
                                                         $cur->user_default_blog = 'default';            # Can change this, PR are welcome
                                                         $this->sudo(array($this->core,'addUser'), $cur);
-                                                }
-                                                # Possible roles:
-                                                # admin "administrator"
-                                                #   contentadmin "manage all entries and comments"
-                                                #     usage "manage their own entries and comments"
-                                                #     publish "publish entries and comments"
-                                                #     delete "delete entries and comments"
-                                                #   categories "manage categories"
-                                                #   media_admin "manage all media items"
-                                                #     media "manage their own media items"
-                                                #   pages "manage pages"
-                                                #   blogroll "manage blogroll"
-                                                $permissions = array(
-                                                        'admin' => "__BLOG_ADMIN__",
-                                                        'contentadmin' => "__BLOG_CONTENTADMIN__",
-                                                        'usage' => "__BLOG_USAGE__",
-                                                        'publish' => "__BLOG_PUBLISH__",
-                                                        'delete' => "__BLOG_DELETE__",
-                                                        'categories' => "__BLOG_CATEGORIES__",
-                                                        'media_admin' => "__BLOG_MEDIA_ADMIN__",
-                                                        'media' => "__BLOG_MEDIA__",
-                                                        'pages' => "__BLOG_PAGES__",
-                                                        'blogroll' => "__BLOG_BLOGROLL__",
-                                                );
-                                                $set_perms = [];
+                                                        # Possible roles:
+                                                        # admin "administrator"
+                                                        #   contentadmin "manage all entries and comments"
+                                                        #     usage "manage their own entries and comments"
+                                                        #     publish "publish entries and comments"
+                                                        #     delete "delete entries and comments"
+                                                        #   categories "manage categories"
+                                                        #   media_admin "manage all media items"
+                                                        #     media "manage their own media items"
+                                                        #   pages "manage pages"
+                                                        #   blogroll "manage blogroll"
+                                                        $permissions = array(
+                                                                'admin' => "__BLOG_ADMIN__",
+                                                                'contentadmin' => "__BLOG_CONTENTADMIN__",
+                                                                'usage' => "__BLOG_USAGE__",
+                                                                'publish' => "__BLOG_PUBLISH__",
+                                                                'delete' => "__BLOG_DELETE__",
+                                                                'categories' => "__BLOG_CATEGORIES__",
+                                                                'media_admin' => "__BLOG_MEDIA_ADMIN__",
+                                                                'media' => "__BLOG_MEDIA__",
+                                                                'pages' => "__BLOG_PAGES__",
+                                                                'blogroll' => "__BLOG_BLOGROLL__",
+                                                        );
+                                                        $set_perms = [];
 
-                                                foreach ($permissions as $perm_id => $v) {
-                                                        if (is_string($v) && $v == "true") {
-                                                                $set_perms[$perm_id] = true;
+                                                        foreach ($permissions as $perm_id => $v) {
+                                                                if (is_string($v) && $v == "true") {
+                                                                        $set_perms[$perm_id] = true;
+                                                                }
                                                         }
+                                                        $this->sudo(array($this->core, 'setUserBlogPermissions'), $user_id, 'default', $set_perms, true);
                                                 }
-                                                $this->sudo(array($this->core, 'setUserBlogPermissions'), $user_id, 'default', $set_perms, true);
 
                                                 $this->con->commit();
                                         }

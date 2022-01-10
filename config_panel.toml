@@ -13,6 +13,7 @@ name = "Dotclear2 configuration"
 
 [ynh_users]
 name = "Yunohost users"
+help = "These permissions apply to the first connection of the user, the super user can change them in dotclear."
 
     [ynh_users.main_permission]
     name = "Permissions for YunoHost users"
@@ -102,18 +103,3 @@ name = "Yunohost users"
             yes = "true"
             no = "false"
             bind = "'blogroll':__FINALPATH__/inc/class.auth.ldap.php"
-
-
-
-
-
-# admin "administrator"
-#   contentadmin "manage all entries and comments"
-#     usage "manage their own entries and comments"
-#     publish "publish entries and comments"
-#     delete "delete entries and comments"
-#   categories "manage categories"
-#   media_admin "manage all media items"
-#     media "manage their own media items"
-#   pages "manage pages"
-#   blogroll "manage blogroll"
