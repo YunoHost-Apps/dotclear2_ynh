@@ -29,6 +29,11 @@ class ldapDcAuth extends dcAuth
 
                                 if ($info["count"] == 1)
                                 {
+                                        # To be case sensitive
+                                        if ($info[0]['dn'] != "uid=".$user_id.",ou=users,".$this->base) {
+                                                return parent::checkUser($user_id, $pwd);
+                                        }
+                                        
                                         try
                                         {
                                                 $this->con->begin();
@@ -42,6 +47,13 @@ class ldapDcAuth extends dcAuth
                                                 $cur->user_name = $info[0]['sn'][0];
                                                 $cur->user_firstname = $info[0]['givenname'][0];
                                                 $cur->user_displayname = $info[0]['cn'][0];
+                                                $super_user = "__ADMIN__";
+                                                if ($super_user == $user_id) {
+                                                        $cur->user_super = 1;
+                                                }
+                                                else {
+                                                        $cur->user_super = 0;
+                                                }
 
                                                 # If the user exist, then we just update his password.
                                                 if ($this->core->userExists($user_id))
@@ -59,18 +71,38 @@ class ldapDcAuth extends dcAuth
                                                         $cur->user_default_blog = 'default';            # Can change this, PR are welcome
                                                         $this->sudo(array($this->core,'addUser'), $cur);
                                                         # Possible roles:
-                                                        #admin "administrator"
-                                                        #usage "manage their own entries and comments"
-                                                        #publish "publish entries and comments"
-                                                        #delete "delete entries and comments"
-                                                        #contentadmin "manage all entries and comments"
-                                                        #categories "manage categories"
-                                                        #media "manage their own media items"
-                                                        #media_admin "manage all media items"
-                                                        #pages "manage pages"
-                                                        #blogroll "manage blogroll"
-                                                        $this->sudo(array($this->core, 'setUserBlogPermissions'), $user_id, 'default', array('usage'=>true)); # Can change this, PR are welcome
+                                                        # admin "administrator"
+                                                        #   contentadmin "manage all entries and comments"
+                                                        #     usage "manage their own entries and comments"
+                                                        #     publish "publish entries and comments"
+                                                        #     delete "delete entries and comments"
+                                                        #   categories "manage categories"
+                                                        #   media_admin "manage all media items"
+                                                        #     media "manage their own media items"
+                                                        #   pages "manage pages"
+                                                        #   blogroll "manage blogroll"
+                                                        $permissions = array(
+                                                                'admin' => "__BLOG_ADMIN__",
+                                                                'contentadmin' => "__BLOG_CONTENTADMIN__",
+                                                                'usage' => "__BLOG_USAGE__",
+                                                                'publish' => "__BLOG_PUBLISH__",
+                                                                'delete' => "__BLOG_DELETE__",
+                                                                'categories' => "__BLOG_CATEGORIES__",
+                                                                'media_admin' => "__BLOG_MEDIA_ADMIN__",
+                                                                'media' => "__BLOG_MEDIA__",
+                                                                'pages' => "__BLOG_PAGES__",
+                                                                'blogroll' => "__BLOG_BLOGROLL__",
+                                                        );
+                                                        $set_perms = [];
+
+                                                        foreach ($permissions as $perm_id => $v) {
+                                                                if (is_string($v) && $v == "true") {
+                                                                        $set_perms[$perm_id] = true;
+                                                                }
+                                                        }
+                                                        $this->sudo(array($this->core, 'setUserBlogPermissions'), $user_id, 'default', $set_perms, true);
                                                 }
+
                                                 $this->con->commit();
                                         }
                                         catch (Exception $e)
@@ -89,7 +121,7 @@ class ldapDcAuth extends dcAuth
                                 error_log("Failed to connect with the user ".$user_id);
                         }
                 }
-                return parent::checkUser($user_id, $pwd);   
+                return parent::checkUser($user_id, $pwd);
         }
 }
 ?>
