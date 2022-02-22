@@ -9,6 +9,13 @@
     "version": "2.20.1~ynh2",
     "license": "GPL-2.0-or-later",
     "url": "https://dotclear.org/",
+    "upstream": {
+        "license": "GPL-2.0-or-later",
+        "website": "https://dotclear.org",
+        "demo": "https://www.softaculous.com/demos/Dotclear",
+        "admindoc": "https://dotclear.org/documentation/2.0",
+        "code": "https://git.dotclear.org/dev/dotclear"
+    },
     "maintainer": {
         "name": "kay0u",
         "email": "pierre@kayou.io"
