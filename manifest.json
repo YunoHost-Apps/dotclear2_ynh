@@ -6,7 +6,7 @@
         "en": "Blog publishing application",
         "fr": "Moteur de blog"
     },
-    "version": "2.20.1~ynh2",
+    "version": "2.21.2~ynh1",
     "license": "GPL-2.0-or-later",
     "url": "https://dotclear.org/",
     "upstream": {
@@ -30,7 +30,7 @@
         "mysql"
     ],
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
                 "type": "domain",
