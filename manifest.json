@@ -6,7 +6,7 @@
         "en": "Blog publishing application",
         "fr": "Moteur de blog"
     },
-    "version": "2.20.1~ynh2",
+    "version": "2.21.1~ynh1",
     "license": "GPL-2.0-or-later",
     "url": "https://dotclear.org/",
     "upstream": {
@@ -21,7 +21,7 @@
         "email": "pierre@kayou.io"
     },
     "requirements": {
-        "yunohost": ">= 4.3.2"
+        "yunohost": ">= 11.0.0"
     },
     "multi_instance": true,
     "services": [
@@ -30,7 +30,7 @@
         "mysql"
     ],
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
                 "type": "domain",
