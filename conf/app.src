@@ -1,7 +1,7 @@
-SOURCE_URL=http://download.dotclear.org/latest/dotclear-2.22.tar.gz
-SOURCE_SUM=0f704078c5c35e70b96d15ca44ace5bc1566b252adc37d2642d7bdd7c9d1a76c
+SOURCE_URL=https://download.dotclear.org/latest/dotclear-2.22.zip
+SOURCE_SUM=94895d2479654c233f9b269a007ebb36bcf8cba34f4c1071424957f79b90ad6f
 SOURCE_SUM_PRG=sha256sum
-SOURCE_FORMAT=tar.gz
+SOURCE_FORMAT=zip
 SOURCE_IN_SUBDIR=true
 SOURCE_FILENAME=
 SOURCE_EXTRACT=true
