@@ -5,7 +5,7 @@ It shall NOT be edited by hand.
 
 # DotClear 2 for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/dotclear2.svg)](https://dash.yunohost.org/appci/app/dotclear2) ![](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/dotclear2.svg)](https://dash.yunohost.org/appci/app/dotclear2) ![Working status](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)  
 [![Install DotClear 2 with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=dotclear2)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -23,7 +23,7 @@ Blog publishing application
 
 ## Screenshots
 
-![](./doc/screenshots/ss2_dotclear.png)
+![Screenshot of DotClear 2](./doc/screenshots/ss2_dotclear.png)
 
 ## Disclaimers / important information
 
@@ -39,21 +39,22 @@ Can the app be used by multiple users? **Yes**
 
 ## Documentation and resources
 
-* Official app website: https://dotclear.org
-* Official admin documentation: https://dotclear.org/documentation/2.0
-* Upstream app code repository: https://git.dotclear.org/dev/dotclear
-* YunoHost documentation for this app: https://yunohost.org/app_dotclear2
-* Report a bug: https://github.com/YunoHost-Apps/dotclear2_ynh/issues
+* Official app website: <https://dotclear.org>
+* Official admin documentation: <https://dotclear.org/documentation/2.0>
+* Upstream app code repository: <https://git.dotclear.org/dev/dotclear>
+* YunoHost documentation for this app: <https://yunohost.org/app_dotclear2>
+* Report a bug: <https://github.com/YunoHost-Apps/dotclear2_ynh/issues>
 
 ## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/dotclear2_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
-```
+
+``` bash
 sudo yunohost app install https://github.com/YunoHost-Apps/dotclear2_ynh/tree/testing --debug
 or
 sudo yunohost app upgrade dotclear2 -u https://github.com/YunoHost-Apps/dotclear2_ynh/tree/testing --debug
 ```
 
-**More info regarding app packaging:** https://yunohost.org/packaging_apps
+**More info regarding app packaging:** <https://yunohost.org/packaging_apps>

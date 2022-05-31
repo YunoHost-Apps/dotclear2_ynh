@@ -7,7 +7,6 @@
         "fr": "Moteur de blog"
     },
     "version": "2.22~ynh1",
-    "license": "GPL-2.0-or-later",
     "url": "https://dotclear.org/",
     "upstream": {
         "license": "GPL-2.0-or-later",
@@ -16,6 +15,7 @@
         "admindoc": "https://dotclear.org/documentation/2.0",
         "code": "https://git.dotclear.org/dev/dotclear"
     },
+    "license": "GPL-2.0-or-later",
     "maintainer": {
         "name": "kay0u",
         "email": "pierre@kayou.io"
@@ -33,8 +33,7 @@
         "install": [
             {
                 "name": "domain",
-                "type": "domain",
-                "example": "example.com"
+                "type": "domain"
             },
             {
                 "name": "path",
@@ -43,14 +42,13 @@
                 "default": "/dotclear2"
             },
             {
-                "name": "admin",
-                "type": "user",
-                "example": "johndoe"
-            },
-            {
                 "name": "is_public",
                 "type": "boolean",
                 "default": true
+            },
+            {
+                "name": "admin",
+                "type": "user"
             }
         ]
     }
