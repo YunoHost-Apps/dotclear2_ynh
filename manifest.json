@@ -6,15 +6,22 @@
         "en": "Blog publishing application",
         "fr": "Moteur de blog"
     },
-    "version": "2.20.1~ynh2",
-    "license": "GPL-2.0-or-later",
+    "version": "2.22~ynh1",
     "url": "https://dotclear.org/",
+    "upstream": {
+        "license": "GPL-2.0-or-later",
+        "website": "https://dotclear.org",
+        "demo": "https://www.softaculous.com/demos/Dotclear",
+        "admindoc": "https://dotclear.org/documentation/2.0",
+        "code": "https://git.dotclear.org/dev/dotclear"
+    },
+    "license": "GPL-2.0-or-later",
     "maintainer": {
         "name": "kay0u",
         "email": "pierre@kayou.io"
     },
     "requirements": {
-        "yunohost": ">= 4.3.2"
+        "yunohost": ">= 11.0.0"
     },
     "multi_instance": true,
     "services": [
@@ -23,11 +30,10 @@
         "mysql"
     ],
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
-                "type": "domain",
-                "example": "example.com"
+                "type": "domain"
             },
             {
                 "name": "path",
@@ -36,14 +42,13 @@
                 "default": "/dotclear2"
             },
             {
-                "name": "admin",
-                "type": "user",
-                "example": "johndoe"
-            },
-            {
                 "name": "is_public",
                 "type": "boolean",
                 "default": true
+            },
+            {
+                "name": "admin",
+                "type": "user"
             }
         ]
     }

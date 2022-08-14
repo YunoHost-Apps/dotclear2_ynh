@@ -16,9 +16,8 @@
 # Fetching information
 current_version=$(cat manifest.json | jq -j '.version|split("~")[0]')
 repo=$(cat manifest.json | jq -j '.upstream.code|split("https://github.com/")[1]')
-
-asset=$(curl --silent "https://download.dotclear.org/latest/" | grep "dotclear-.*?.tar.gz" -Po | head -1)
-version=${asset%.tar.gz}
+asset=$(curl --silent "https://download.dotclear.org/latest/" | grep "dotclear-.*?.zip" -Po | head -1)
+version=${asset%.zip}
 version=${version#dotclear-}
 
 # Later down the script, we assume the version has only digits and dots
@@ -55,20 +54,20 @@ src="app"
 tempdir="$(mktemp -d)"
 
 # Download sources and calculate checksum
-curl --silent -4 -L http://download.dotclear.org/latest/dotclear-$version.tar.gz -o "$tempdir/$asset"
+curl --silent -4 -L http://download.dotclear.org/latest/dotclear-$version.zip -o "$tempdir/$asset"
 checksum=$(sha256sum "$tempdir/$asset" | head -c 64)
 
 # Delete temporary directory
 rm -rf $tempdir
 
 # Get extension
-if [[ $asset == *.tar.gz ]]; then
-  extension=tar.gz
+if [[ $asset == *.zip ]]; then
+  extension=zip
 fi
 
 # Rewrite source file
 cat <<EOT > conf/$src.src
-SOURCE_URL=http://download.dotclear.org/latest/dotclear-$version.tar.gz
+SOURCE_URL=http://download.dotclear.org/latest/dotclear-$version.zip
 SOURCE_SUM=$checksum
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=$extension
