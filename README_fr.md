@@ -17,7 +17,8 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Moteur de blog
 
-**Version incluse :** 2.22~ynh1
+**Version incluse :** 2.22~ynh1
+
 
 **Démo :** https://www.softaculous.com/demos/Dotclear
 
