@@ -20,6 +20,7 @@ Blog publishing application
 **Shipped version:** 2.23.1~ynh1
 
 
+
 **Demo:** https://www.softaculous.com/demos/Dotclear
 
 ## Screenshots
