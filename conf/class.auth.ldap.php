@@ -9,7 +9,7 @@ class ldapDcAuth extends dcAuth
         private $port = "389";
         private $base = "dc=yunohost,dc=org";
 
-        public function checkUser($user_id, $pwd=null, $user_key=null, $check_blog=true)
+        public function checkUser(string $user_id, ?string $pwd = NULL, ?string $user_key = NULL, bool $check_blog = true): bool
         {
                 if ($pwd == '') {
                         return parent::checkUser($user_id, null, $user_key, $check_blog);
@@ -56,9 +56,9 @@ class ldapDcAuth extends dcAuth
                                                 }
 
                                                 # If the user exist, then we just update his password.
-                                                if ($this->core->userExists($user_id))
+                                                if (dcCore::app()->userExists($user_id))
                                                 {
-                                                        $this->sudo(array($this->core, 'updUser'), $user_id, $cur);
+                                                        $this->sudo(array(dcCore::app(), 'updUser'), $user_id, $cur);
                                                 }
                                                 # If not, we create him.
                                                 # In order for him to connect,
@@ -69,7 +69,7 @@ class ldapDcAuth extends dcAuth
                                                         $cur->user_lang = 'fr';                         # Can change this, PR are welcome
                                                         $cur->user_tz = 'Europe/Paris';                 # Can change this, PR are welcome
                                                         $cur->user_default_blog = 'default';            # Can change this, PR are welcome
-                                                        $this->sudo(array($this->core,'addUser'), $cur);
+                                                        $this->sudo(array(dcCore::app(),'addUser'), $cur);
                                                         # Possible roles:
                                                         # admin "administrator"
                                                         #   contentadmin "manage all entries and comments"
@@ -100,7 +100,7 @@ class ldapDcAuth extends dcAuth
                                                                         $set_perms[$perm_id] = true;
                                                                 }
                                                         }
-                                                        $this->sudo(array($this->core, 'setUserBlogPermissions'), $user_id, 'default', $set_perms, true);
+                                                        $this->sudo(array(dcCore::app(), 'setUserBlogPermissions'), $user_id, 'default', $set_perms, true);
                                                 }
 
                                                 $this->con->commit();
