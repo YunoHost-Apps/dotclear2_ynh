@@ -1,5 +1,5 @@
-SOURCE_URL=http://download.dotclear.org/latest/dotclear-2.24.1.zip
-SOURCE_SUM=7d6c75d0b0d5c6f6aefaf663a32a6d0df24f9a915f96327676ba4157329a3390
+SOURCE_URL=http://download.dotclear.org/latest/dotclear-2.25.2.zip
+SOURCE_SUM=9b9881ffdd2466225acfcd9aba75429486e7735d5e79d23f75a7bd7bbb8d145b
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=zip
 SOURCE_IN_SUBDIR=true
