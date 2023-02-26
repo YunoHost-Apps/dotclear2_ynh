@@ -6,6 +6,7 @@ It shall NOT be edited by hand.
 # DotClear 2 for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/dotclear2.svg)](https://dash.yunohost.org/appci/app/dotclear2) ![Working status](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)
+
 [![Install DotClear 2 with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=dotclear2)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -17,7 +18,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Blog publishing application
 
-**Shipped version:** 2.24.1~ynh1
+**Shipped version:** 2.25.3~ynh1
 
 **Demo:** https://www.softaculous.com/demos/Dotclear
 
