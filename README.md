@@ -18,7 +18,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Blog publishing application
 
-**Shipped version:** 2.24.1~ynh1
+**Shipped version:** 2.27.1~ynh1
 
 **Demo:** https://www.softaculous.com/demos/Dotclear
 
