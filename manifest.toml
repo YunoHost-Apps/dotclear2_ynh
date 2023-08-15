@@ -61,8 +61,8 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     [resources.permissions]
     main.url = "/"
 
+    [resources.apt]
+    packages = "mariadb-server, php8.2, php8.2-fpm"
+
     [resources.database]
     type = "mysql"
-
-    [resources.apt]
-    packages = "php8.2, php8.2-fpm"
