@@ -1,7 +1,0 @@
-SOURCE_URL=http://download.dotclear.org/latest/dotclear-2.27.1.zip
-SOURCE_SUM=5f80ffca818424b7ff7da79d4d00edfd8785e98dafd0562b0f964a5808728d63
-SOURCE_SUM_PRG=sha256sum
-SOURCE_FORMAT=zip
-SOURCE_IN_SUBDIR=true
-SOURCE_FILENAME=
-SOURCE_EXTRACT=true
