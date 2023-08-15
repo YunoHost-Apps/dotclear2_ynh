@@ -101,7 +101,7 @@ ynh_add_config --template="../conf/class.auth.ldap.php" --destination="$install_
 
 cat << EOF >> $php_config
 
-\$__autoload['ldapDcAuth'] = dirname(__FILE__).'/class.auth.ldap.php';
+require dirname(__FILE__).'/class.auth.ldap.php';
 define('DC_AUTH_CLASS','ldapDcAuth');
 EOF
 
