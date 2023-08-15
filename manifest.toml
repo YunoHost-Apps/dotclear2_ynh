@@ -65,4 +65,4 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     type = "mysql"
 
     [resources.apt]
-    packages = ["php8.2", "php8.2-fpm"]
+    packages = "php8.2, php8.2-fpm"
