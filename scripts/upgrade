@@ -130,6 +130,13 @@ if [ -z "$blog_admin" ] ||
 fi
 
 #=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Installing dependencies..." --weight=1
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
 # CREATE DEDICATED USER
 #=================================================
 ynh_script_progression --message="Making sure dedicated system user exists..."

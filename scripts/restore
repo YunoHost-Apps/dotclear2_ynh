@@ -49,6 +49,13 @@ ynh_script_progression --message="Restoring the NGINX configuration..."
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 #=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Installing dependencies..." --weight=1
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
 # RECREATE THE DEDICATED USER
 #=================================================
 ynh_script_progression --message="Recreating the dedicated system user..." --weight=2
