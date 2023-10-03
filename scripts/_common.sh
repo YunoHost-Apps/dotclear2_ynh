@@ -4,6 +4,8 @@
 # COMMON VARIABLES
 #=================================================
 
+YNH_PHP_VERSION="8.1"
+
 pkg_dependencies="php8.1-mbstring php8.1-iconv php8.1-simplexml php8.1-mysqli mariadb-server"
 
 #=================================================
