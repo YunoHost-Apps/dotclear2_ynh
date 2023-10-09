@@ -66,7 +66,6 @@ tool allowing anyone to publish on the web, regardless of their technical skills
 * Official app website: <https://dotclear.org>
 * Official admin documentation: <https://dotclear.org/documentation/2.0>
 * Upstream app code repository: <https://git.dotclear.org/dev/dotclear>
-* YunoHost documentation for this app: <https://yunohost.org/app_dotclear2>
 * Report a bug: <https://github.com/YunoHost-Apps/dotclear2_ynh/issues>
 
 ## Developer info
