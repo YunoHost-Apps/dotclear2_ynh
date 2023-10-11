@@ -65,6 +65,7 @@ cp $php_config.in $php_config
 admin_url="${path%/}/admin/"
 
 admin=$(yunohost user permission info "$app.admin" --output-as json | jq -r '.allowed | .[]')
+ynh_app_setting_set --app=$app --key=admin --value=$admin
 email=$(ynh_user_get_info --username=$admin --key=mail)
 
 # Config as if we called in admin/install/wizard.php

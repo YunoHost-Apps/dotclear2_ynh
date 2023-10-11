@@ -11,6 +11,13 @@ source /usr/share/yunohost/helpers
 ynh_abort_if_errors
 
 #=================================================
+# RETRIEVE ARGUMENTS
+#=================================================
+
+install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
+admin=$(ynh_app_setting_get --app=$app --key=admin)
+
+#=================================================
 # SPECIFIC SETTERS FOR TOML SHORT KEYS
 #=================================================
 set__blogs_list() {
@@ -75,3 +82,8 @@ set__blogs_list() {
     
     ynh_app_setting_set $app blogs_list $blogs_list
 }
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+ynh_app_config_run $1
