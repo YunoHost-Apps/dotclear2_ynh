@@ -116,6 +116,9 @@ chown $app:$app "$php_config"
 #=================================================
 ynh_script_progression --message="Finalizing installation..." --weight=14
 
+# Give the admin the proper permission and give temporary admin access to visitors
+ynh_permission_update --permission="admin" --add="$admin" "visitors"
+
 firstname=$(ynh_user_get_info --username=$admin --key=firstname)
 lastname=$(ynh_user_get_info --username=$admin --key=lastname)
 email=$(ynh_user_get_info --username=$admin --key=mail)
@@ -126,6 +129,9 @@ password=$(ynh_string_random --length=30)
 installUrl="/admin/install/index.php"
 
 ynh_local_curl $installUrl "u_email=$email" "u_firstname=$firstname" "u_name=$lastname" "u_login=$admin" "u_pwd=$password" "u_pwd2=$password"
+
+# Remove visitor access to admin
+ynh_permission_update --permission="admin" --remove="visitors"
 
 #=================================================
 # GENERIC FINALIZATION

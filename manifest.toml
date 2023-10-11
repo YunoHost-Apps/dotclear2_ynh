@@ -42,6 +42,7 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
 
     [install.admin]
     type = "user"
+    help.en = "Choose the Dotclear super user. By default, all users in the admin group will be admins of Dotclear."
 
 [resources]
     [resources.sources.latest]
@@ -62,6 +63,9 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
 
     [resources.permissions]
     main.url = "/"
+    admin.url = "/admin"
+    admin.show_tile = false
+    admin.allowed = "admins"
 
     [resources.apt]
     packages = "mariadb-server, php8.2, php8.2-fpm, php8.2-mbstring, php8.2-mysql, php-iconv, php8.2-xml, php8.2-cli, php8.2-intl, php8.2-ldap"
