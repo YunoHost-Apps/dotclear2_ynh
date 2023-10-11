@@ -103,3 +103,16 @@ help = "These permissions apply to the first connection of the user, the super u
             yes = "true"
             no = "false"
             bind = "'blogroll':__INSTALL_DIR__/inc/class.auth.ldap.php"
+
+[blogs]
+name = "Multiple blogs management"
+help = "Here you can instruct YunoHost to handle multiple blogs. It will create the appropriate permissions and NGINX configuration files. You still need to add them in Dotclear's administration panel. Removing them here will not delete them from Dotclear, and vice-versa."
+
+    [blogs.blogs_list]
+    name = "List of blogs to handle"
+
+        [blogs.blogs_list.blogs_list]
+        ask = "List blogs with the format `id@domain.example/path`"
+        type = "tags"
+        pattern.regexp = "[\\w]+@[\\w.]+\\/[\\w]*"
+        pattern.error = "Incorrect format. Use `id@domain.example/path`"

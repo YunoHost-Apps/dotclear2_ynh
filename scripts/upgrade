@@ -55,6 +55,11 @@ if [ -z "$blog_admin" ] ||
 	ynh_app_setting_set --app=$app --key=blog_blogroll --value=$blog_blogroll
 fi
 
+if [ -z "$blogs_list" ]; then
+    # Initializing blogs_list (excluding default)
+    ynh_app_setting_set --app=$app --key=blogs_list --value=""
+fi
+
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================

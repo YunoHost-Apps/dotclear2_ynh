@@ -49,7 +49,7 @@ set__blogs_list() {
     # https://stackoverflow.com/questions/2312762/compare-difference-of-two-arrays-in-bash
     # Get added and removed blogs
     added_ids_array=(`echo ${!domain_array[@]} ${!old_domain_array[@]} | tr ' ' '\n' | sort | uniq -u `)
-    removed_ids_array=(`echo ${!old_domain_array[@]} $!domain_array[@]} | tr ' ' '\n' | sort | uniq -D | uniq `)
+    removed_ids_array=(`echo ${!old_domain_array[@]} ${!domain_array[@]} | tr ' ' '\n' | sort | uniq -D | uniq `)
 
     for id in $removed_ids_array; do
         if [ ynh_permission_exists --permission="$id" ]; then
@@ -72,10 +72,10 @@ set__blogs_list() {
 
         if [ ynh_permission_exists --permission="$id" ]; then
             ynh_permission_url --permission="$id" --url="$domain_array[$id]$path_array[$id]"
-            ynh_permission_url --permission="$id.admin" --url="$domain_array[$id]$path_array[$id]/admin"
+            ynh_permission_url --permission="${id}-admin" --url="$domain_array[$id]$path_array[$id]/admin"
         else
             ynh_permission_create --permission="$id" --url="$domain_array[$id]$path_array[$id]"
-            ynh_permission_create --permission="$id.admin" --url="$domain_array[$id]$path_array[$id]/admin"
+            ynh_permission_create --permission="${id}-admin" --url="$domain_array[$id]$path_array[$id]/admin"
         fi
         
     done
