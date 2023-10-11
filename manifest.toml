@@ -47,14 +47,14 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     [resources.sources.latest]
     prefetch = false
     in_subdir = 2
-    url = "https://download.dotclear.org/latest/dotclear-2.27.1.tar.gz"
-    sha256 = "15d5d139dffd5e53f7c2301e01f085edcdbed7a89d9e829864a81b7b99cba5e8"
+    url = "https://download.dotclear.org/latest/dotclear-2.27.3.tar.gz"
+    sha256 = "86d31cd9f1d8f3147555858c339adb6752db9e8585731eddf697bb1e3fba80c6"
 
     [resources.sources.attic]
     prefetch = false
     in_subdir = 2
-    url = "https://download.dotclear.org/attic/dotclear-2.27.1.tar.gz"
-    sha256 = "15d5d139dffd5e53f7c2301e01f085edcdbed7a89d9e829864a81b7b99cba5e8"
+    url = "https://download.dotclear.org/attic/dotclear-2.27.3.tar.gz"
+    sha256 = "86d31cd9f1d8f3147555858c339adb6752db9e8585731eddf697bb1e3fba80c6"
 
     [resources.system_user]
 
@@ -64,7 +64,7 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     main.url = "/"
 
     [resources.apt]
-    packages = "mariadb-server, php7.4, php7.4-fpm, php7.4-mbstring"
+    packages = "mariadb-server, php8.2, php8.2-fpm, php8.2-mbstring, php8.2-mysql, php-iconv, php8.2-xml, php8.2-cli, php8.2-intl, php8.2-ldap"
 
     [resources.database]
     type = "mysql"
