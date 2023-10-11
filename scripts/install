@@ -73,6 +73,7 @@ ynh_replace_string --match_string="'DC_DBNAME', ''" --replace_string="'DC_DBNAME
 ynh_replace_string --match_string="'DC_MASTER_KEY', ''" --replace_string="'DC_MASTER_KEY', '$master_key'" --target_file=$php_config
 ynh_replace_string --match_string="'DC_ADMIN_URL', ''" --replace_string="'DC_ADMIN_URL', 'https://$domain$admin_url'" --target_file=$php_config
 ynh_replace_string --match_string="'DC_ADMIN_MAILFROM', ''" --replace_string="'DC_ADMIN_MAILFROM', '$email'" --target_file=$php_config
+ynh_replace_string --match_string="//define('DC_NOT_UPDATE', false);" --replace_string="define('DC_NOT_UPDATE', true);" --target_file=$php_config
 
 # Adding LDAP login
 blog_admin="false"
