@@ -53,7 +53,7 @@ tool allowing anyone to publish on the web, regardless of their technical skills
 - Twice free
 
 
-**Version incluse :** 2.27.1~ynh1
+**Version incluse :** 2.27.3~ynh1
 
 **Démo :** https://www.softaculous.com/demos/Dotclear
 
