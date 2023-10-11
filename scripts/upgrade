@@ -57,7 +57,7 @@ fi
 
 if [ -z "$blogs_list" ]; then
     # Initializing blogs_list (excluding default)
-    ynh_app_setting_set --app=$app --key=blogs_list --value=""
+    ynh_app_setting_set --app=$app --key=blogs_list --value="default@$domain$path"
 fi
 
 #=================================================

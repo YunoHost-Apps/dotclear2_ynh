@@ -16,6 +16,8 @@ ynh_abort_if_errors
 
 install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path=$(ynh_app_setting_get --app=$app --key=path)
 
 #=================================================
 # SPECIFIC SETTERS FOR TOML SHORT KEYS
@@ -25,13 +27,15 @@ set__blogs_list() {
     declare -A domain_array
     declare -A path_array
 
+    default_present=false
     for blog in $(echo $blogs_list | sed "s/,/ /"); do
         id=$(echo $blog | cut -d@ -f1)
-        domain=$(echo $blog | cut -d@ -f2 | cut -d/ -f1)
-        path="/$(echo $blog | cut -d@ -f2 | cut -d/ -f2)"
+        d=$(echo $blog | cut -d@ -f2 | cut -d/ -f1)
+        p="/$(echo $blog | cut -d@ -f2 | cut -d/ -f2)"
+        [ $id = "default" ] && default_present=true
 
-        domain_array+=([$id]=$domain)
-        path_array+=([$id]=$path)
+        domain_array+=([$id]=$d)
+        path_array+=([$id]=$p)
     done
 
     declare -A old_domain_array
@@ -39,43 +43,62 @@ set__blogs_list() {
 
     for blog in $(echo ${old[blogs_list]} | sed "s/,/ /"); do
         id=$(echo $blog | cut -d@ -f1)
-        domain=$(echo $blog | cut -d@ -f2 | cut -d/ -f1)
-        path="/$(echo $blog | cut -d@ -f2 | cut -d/ -f2)"
+        d=$(echo $blog | cut -d@ -f2 | cut -d/ -f1)
+        p="/$(echo $blog | cut -d@ -f2 | cut -d/ -f2)"
 
-        old_domain_array+=([$id]=$domain)
-        old_path_array+=([$id]=$path)
+        old_domain_array+=([$id]=$d)
+        old_path_array+=([$id]=$p)
     done
 
+    # Make sure the default blog is always listed
+    domain_array+=(["default"]=$domain)
+    path_array+=(["default"]=$path)
+    old_domain_array+=(["default"]=$domain)
+    old_path_array+=(["default"]=$path)
+    if [ $default_present = false ]; then
+        if [ -z ${blogs_list:-} ]; then
+            blogs_list="default@$domain$path"
+        else
+            blogs_list+=",default@$domain$path"
+        fi
+    fi
+    
     # https://stackoverflow.com/questions/2312762/compare-difference-of-two-arrays-in-bash
     # Get added and removed blogs
-    added_ids_array=(`echo ${!domain_array[@]} ${!old_domain_array[@]} | tr ' ' '\n' | sort | uniq -u `)
-    removed_ids_array=(`echo ${!old_domain_array[@]} ${!domain_array[@]} | tr ' ' '\n' | sort | uniq -D | uniq `)
+    added_ids_array=()
+    added_ids_array+=(`echo ${!domain_array[@]} ${!old_domain_array[@]} | tr ' ' '\n' | sort | uniq -u `)
+    removed_ids_array=()
+    removed_ids_array+=(`echo ${!domain_array[@]} ${!old_domain_array[@]} | tr ' ' '\n' | sort | uniq -D | uniq `)
 
-    for id in $removed_ids_array; do
-        if [ ynh_permission_exists --permission="$id" ]; then
-            ynh_permission_delete --permission="$id"
+    ynh_print_info --message="Added blogs: ${added_ids_array[@]}"
+    ynh_print_info --message="Removed blogs: ${removed_ids_array[@]}"
+
+    for id in ${removed_ids_array[@]}; do
+        if [ $id != "default" ]; then
+            if ynh_permission_exists --permission="$id"; then
+                ynh_permission_delete --permission="$id"
+            fi
+            ynh_secure_remove --file="/etc/nginx/conf.d/${old_domain_array[$id]}.d/$app-$id.conf"
         fi
-        ynh_secure_remove --file="/etc/nginx/conf.d/${old_domain_array[$id]}.d/$app.conf"
     done
 
-    for id in $domain_array; do
-    
-        if [ $domain_array[$id] != $old_domain_array[$id] ]; then
-            mv /etc/nginx/conf.d/${old_domain_array[$id]}.d/$app.conf /etc/nginx/conf.d/${domain_array[$id]}.d/$app.conf
-        fi
-        
-        if [ $path_array[$id] != $old_path_array[$id] ]; then
-            domain=$domain_array[$id]
-            path=$path_array[$id]
-            ynh_add_config --template="nginx.conf" --destination="/etc/nginx/conf.d/${domain_array[$id]}.d/$app.conf"
-        fi
+    for id in ${!domain_array[@]}; do
+        if [ $id != "default" ]; then
+            if [ ${domain_array[$id]:-} != ${old_domain_array[$id]:-} ] ||
+               [ ${path_array[$id]:-} != ${old_path_array[$id]:-} ]; then
+                domain=${domain_array[$id]}
+                path=${path_array[$id]}
+                [ ! -z ${old_domain_array[$id]:-} ] && ynh_secure_remove --file="/etc/nginx/conf.d/${old_domain_array[$id]}.d/$app-$id.conf"
+                ynh_add_config --template="nginx.conf" --destination="/etc/nginx/conf.d/${domain_array[$id]}.d/$app-$id.conf"
+            fi
 
-        if [ ynh_permission_exists --permission="$id" ]; then
-            ynh_permission_url --permission="$id" --url="$domain_array[$id]$path_array[$id]"
-            ynh_permission_url --permission="${id}-admin" --url="$domain_array[$id]$path_array[$id]/admin"
-        else
-            ynh_permission_create --permission="$id" --url="$domain_array[$id]$path_array[$id]"
-            ynh_permission_create --permission="${id}-admin" --url="$domain_array[$id]$path_array[$id]/admin"
+            if ynh_permission_exists --permission="$id"; then
+                ynh_permission_url --permission="$id" --url="${domain_array[$id]}${path_array[$id]}"
+                ynh_permission_url --permission="${id}-admin" --url="${domain_array[$id]}${path_array[$id]}/admin"
+            else
+                ynh_permission_create --permission="$id" --url="${domain_array[$id]}${path_array[$id]}" --show_tile=true
+                ynh_permission_create --permission="${id}-admin" --url="${domain_array[$id]}${path_array[$id]}/admin" --show_tile=true
+            fi
         fi
         
     done

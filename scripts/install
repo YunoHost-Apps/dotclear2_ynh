@@ -132,7 +132,7 @@ installUrl="/admin/install/index.php"
 ynh_local_curl $installUrl "u_email=$email" "u_firstname=$firstname" "u_name=$lastname" "u_login=$admin" "u_pwd=$password" "u_pwd2=$password"
 
 # Initializing blogs_list (excluding default)
-ynh_app_setting_set --app=$app --key=blogs_list --value=""
+ynh_app_setting_set --app=$app --key=blogs_list --value="default@$domain$path"
 
 #=================================================
 # GENERIC FINALIZATION
