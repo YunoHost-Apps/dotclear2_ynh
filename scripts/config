@@ -65,14 +65,13 @@ set__blogs_list() {
     
     # https://stackoverflow.com/questions/2312762/compare-difference-of-two-arrays-in-bash
     # Get added and removed blogs
-    added_ids_array=()
-    added_ids_array+=(`echo ${!domain_array[@]} ${!old_domain_array[@]} | tr ' ' '\n' | sort | uniq -u `)
-    removed_ids_array=()
-    removed_ids_array+=(`echo ${!domain_array[@]} ${!old_domain_array[@]} | tr ' ' '\n' | sort | uniq -D | uniq `)
+    difference_ids_array=(`echo ${!domain_array[@]} ${!old_domain_array[@]} | tr ' ' '\n' | sort | uniq -u `)
+    added_ids_array=(`echo ${!domain_array[@]} ${difference_ids_array[@]} | tr ' ' '\n' | sort | uniq -D | uniq `)
+    removed_ids_array=(`echo ${!old_domain_array[@]} ${difference_ids_array[@]} | tr ' ' '\n' | sort | uniq -D | uniq `)
 
     ynh_print_info --message="Added blogs: ${added_ids_array[@]}"
     ynh_print_info --message="Removed blogs: ${removed_ids_array[@]}"
-
+    
     for id in ${removed_ids_array[@]}; do
         if [ $id != "default" ]; then
             if ynh_permission_exists --permission="$id"; then
@@ -84,8 +83,8 @@ set__blogs_list() {
 
     for id in ${!domain_array[@]}; do
         if [ $id != "default" ]; then
-            if [ ${domain_array[$id]:-} != ${old_domain_array[$id]:-} ] ||
-               [ ${path_array[$id]:-} != ${old_path_array[$id]:-} ]; then
+            if [ "${domain_array[$id]:-}" != "${old_domain_array[$id]:-}" ] ||
+               [ "${path_array[$id]:-}" != "${old_path_array[$id]:-}" ]; then
                 domain=${domain_array[$id]}
                 path=${path_array[$id]}
                 [ ! -z ${old_domain_array[$id]:-} ] && ynh_secure_remove --file="/etc/nginx/conf.d/${old_domain_array[$id]}.d/$app-$id.conf"
