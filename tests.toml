@@ -7,4 +7,7 @@ test_format = 1.0
     args.init_admin_permission="package_checker"
 
     test_upgrade_from.f356f5b8f496f626aba3ec0f9d9c40c4cb54e7f6.name = "2.15.2~ynh1"
+    test_upgrade_from.f356f5b8f496f626aba3ec0f9d9c40c4cb54e7f6.args.domain="domain.tld"
+    test_upgrade_from.f356f5b8f496f626aba3ec0f9d9c40c4cb54e7f6.args.path="/dotclear2"
+    test_upgrade_from.f356f5b8f496f626aba3ec0f9d9c40c4cb54e7f6.args.init_main_permission="visitors"
     test_upgrade_from.f356f5b8f496f626aba3ec0f9d9c40c4cb54e7f6.args.init_admin_permission="package_checker"
