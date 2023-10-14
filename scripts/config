@@ -18,6 +18,7 @@ install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path=$(ynh_app_setting_get --app=$app --key=path)
+phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
 # SPECIFIC SETTERS FOR TOML SHORT KEYS
@@ -77,6 +78,9 @@ set__blogs_list() {
             if ynh_permission_exists --permission="$id"; then
                 ynh_permission_delete --permission="$id"
             fi
+            if ynh_permission_exists --permission="${id}-admin"; then
+                ynh_permission_delete --permission="${id}-admin"
+            fi
             ynh_secure_remove --file="/etc/nginx/conf.d/${old_domain_array[$id]}.d/$app-$id.conf"
         fi
     done
@@ -87,6 +91,7 @@ set__blogs_list() {
                [ "${path_array[$id]:-}" != "${old_path_array[$id]:-}" ]; then
                 domain=${domain_array[$id]}
                 path=${path_array[$id]}
+                blog_id=$id
                 [ ! -z ${old_domain_array[$id]:-} ] && ynh_secure_remove --file="/etc/nginx/conf.d/${old_domain_array[$id]}.d/$app-$id.conf"
                 ynh_add_config --template="nginx.conf" --destination="/etc/nginx/conf.d/${domain_array[$id]}.d/$app-$id.conf"
             fi
@@ -95,8 +100,8 @@ set__blogs_list() {
                 ynh_permission_url --permission="$id" --url="${domain_array[$id]}${path_array[$id]}"
                 ynh_permission_url --permission="${id}-admin" --url="${domain_array[$id]}${path_array[$id]}/admin"
             else
-                ynh_permission_create --permission="$id" --url="${domain_array[$id]}${path_array[$id]}" --show_tile=true
-                ynh_permission_create --permission="${id}-admin" --url="${domain_array[$id]}${path_array[$id]}/admin" --show_tile=true
+                ynh_permission_create --permission="$id" --url="${domain_array[$id]}${path_array[$id]}" --show_tile=true --allowed=visitors all_users
+                ynh_permission_create --permission="${id}-admin" --url="${domain_array[$id]}${path_array[$id]}/admin" --show_tile=false --allowed=admins
             fi
         fi
         

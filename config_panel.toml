@@ -106,13 +106,23 @@ help = "These permissions apply to the first connection of the user, the super u
 
 [blogs]
 name = "Multiple blogs management"
-help = "Here you can instruct YunoHost to handle multiple blogs. It will create the appropriate permissions and NGINX configuration files. You still need to add them in Dotclear's administration panel. Removing them here will not delete them from Dotclear, and vice-versa."
 
-    [blogs.blogs_list]
-    name = "List of blogs to handle"
+    [blogs.blogs]
+    name = ""
 
-        [blogs.blogs_list.blogs_list]
-        ask = "List blogs with the format `id@domain.example/path`"
+        [blogs.blogs.info]
+        type = "alert"
+        style = "info"
+        ask = "Here you can instruct YunoHost to handle multiple blogs. It will create the appropriate permissions and NGINX configuration files.\n You still need to add them in Dotclear's administration panel. Removing them here will not delete them from Dotclear, and vice-versa."
+
+        [blogs.blogs.blogs_list]
+        ask = "List of blogs"
         type = "tags"
         pattern.regexp = "[\\w]+@[\\w.]+\\/[\\w]*"
         pattern.error = "Incorrect format. Use `id@domain.example/path`"
+        help = """\
+        - The `default` blog cannot be deleted and will be put back in the list. Use the usual Change URL method to move it to a new URL.\n\
+        - Additional blogs must be declared with the format `id@domain.example/path`.
+        Each blog will have two permissions for main and admin access. By default the former has "visitors and all_users" access and the latter has "admins" group access.
+        Keeping the same `id` but changing the domain or path will keep the permission but reset the NGINX configuration file to the new location.
+        """
