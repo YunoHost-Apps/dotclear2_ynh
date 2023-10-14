@@ -23,7 +23,7 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..."
 
-if [ -z "$blog_admin" ] ||
+if [ -z "${blog_admin:-}" ] ||
  [ -z "$blog_contentadmin" ] || 
  [ -z "$blog_usage" ] || 
  [ -z "$blog_publish" ] || 
