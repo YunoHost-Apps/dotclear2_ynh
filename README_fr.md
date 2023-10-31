@@ -6,6 +6,7 @@ It shall NOT be edited by hand.
 # DotClear 2 pour YunoHost
 
 [![Niveau d’intégration](https://dash.yunohost.org/integration/dotclear2.svg)](https://dash.yunohost.org/appci/app/dotclear2) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)
+
 [![Installer DotClear 2 avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=dotclear2)
 
 *[Read this readme in english.](./README.md)*
@@ -42,7 +43,7 @@ Can the app be used by multiple users? **Yes**
 * Site officiel de l’app : <https://dotclear.org>
 * Documentation officielle de l’admin : <https://dotclear.org/documentation/2.0>
 * Dépôt de code officiel de l’app : <https://git.dotclear.org/dev/dotclear>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_dotclear2>
+* YunoHost Store: <https://apps.yunohost.org/app/dotclear2>
 * Signaler un bug : <https://github.com/YunoHost-Apps/dotclear2_ynh/issues>
 
 ## Informations pour les développeurs
