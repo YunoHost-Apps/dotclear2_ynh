@@ -16,10 +16,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 
 ## Vue d’ensemble
 
-Dotclear is an open-source web publishing software.
-Take control over your blog!
-
-Dotclear project's purpose is to provide a user-friendly tool allowing anyone to publish on the web, regardless of their technical skills.
+Dotclear est un logiciel de publication Web open source. L'objectif du projet Dotclear est de fournir un outil convivial permettant à chacun de publier sur le Web, quelles que soient ses compétences techniques.
 
 
 **Version incluse :** 2.27.3~ynh1
