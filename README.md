@@ -35,6 +35,7 @@ Dotclear project's purpose is to provide a user-friendly tool allowing anyone to
 * Official app website: <https://dotclear.org>
 * Official admin documentation: <https://dotclear.org/documentation/2.0>
 * Upstream app code repository: <https://git.dotclear.org/dev/dotclear>
+* YunoHost Store: <https://apps.yunohost.org/app/dotclear2>
 * Report a bug: <https://github.com/YunoHost-Apps/dotclear2_ynh/issues>
 
 ## Developer info
