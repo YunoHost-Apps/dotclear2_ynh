@@ -46,9 +46,11 @@ ram.runtime = "50M"
     default = "visitors"
 
     [install.init_admin_permission]
-    type = "user"
     ask.en = "Choose the Dotclear super user."
+    ask.fr = "Choisissez le super utilisateur Dotclear."
     help.en = "You can later on give admin permission to more users."
+    help.fr = "Vous pourrez ultérieurement accorder l’autorisation d’administrateur à davantage d’utilisateurs."
+    type = "user"
 
 [resources]
     [resources.sources.latest]
