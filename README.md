@@ -18,7 +18,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Blog publishing application
 
-**Shipped version:** 2.24.1~ynh1
+**Shipped version:** 2.27.3~ynh1
 
 **Demo:** https://www.softaculous.com/demos/Dotclear
 
@@ -43,7 +43,7 @@ Can the app be used by multiple users? **Yes**
 * Official app website: <https://dotclear.org>
 * Official admin documentation: <https://dotclear.org/documentation/2.0>
 * Upstream app code repository: <https://git.dotclear.org/dev/dotclear>
-* YunoHost documentation for this app: <https://yunohost.org/app_dotclear2>
+* YunoHost Store: <https://apps.yunohost.org/app/dotclear2>
 * Report a bug: <https://github.com/YunoHost-Apps/dotclear2_ynh/issues>
 
 ## Developer info
