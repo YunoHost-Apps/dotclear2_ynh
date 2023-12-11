@@ -16,7 +16,11 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression --message="Updating NGINX web server configuration..." --weight=2
 
-ynh_change_url_nginx_config
+if _check_if_source_available main; then
+    ynh_setup_source --dest_dir="$install_dir" -s main
+else
+    ynh_setup_source --dest_dir="$install_dir" -s main_attic
+fi
 
 #=================================================
 # SPECIFIC MODIFICATIONS
