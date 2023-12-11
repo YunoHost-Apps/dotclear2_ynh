@@ -15,7 +15,11 @@ source /usr/share/yunohost/helpers
 ynh_script_progression --message="Setting up source files..." --weight=4
 
 # Download, check integrity, uncompress and patch the source from app.src
-_ynh_setup_source_with_fallback
+if _check_if_source_available main; then
+    ynh_setup_source --dest_dir="$install_dir" -s main
+else
+    ynh_setup_source --dest_dir="$install_dir" -s main_attic
+fi
 
 chmod 750 "$install_dir"
 chmod -R o-rwx "$install_dir"
