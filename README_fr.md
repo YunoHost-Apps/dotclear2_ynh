@@ -31,10 +31,6 @@ Dotclear is a free software primarily designed for its users and regularly impro
 
 ![Capture d’écran de DotClear 2](./doc/screenshots/ss2_dotclear.png)
 
-## Avertissements / informations importantes
-
-This app has a configuration panel in YunoHost admin, to change its settings.
-
 ## Documentations et ressources
 
 * Site officiel de l’app : <https://dotclear.org>
