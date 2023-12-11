@@ -16,9 +16,10 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 
 ## Vue d’ensemble
 
-Moteur de blog
+Dotclear est un logiciel de publication Web open source. L'objectif du projet Dotclear est de fournir un outil convivial permettant à chacun de publier sur le Web, quelles que soient ses compétences techniques.
 
-**Version incluse :** 2.24.1~ynh1
+
+**Version incluse :** 2.27.3~ynh1
 
 **Démo :** https://www.softaculous.com/demos/Dotclear
 
@@ -26,24 +27,12 @@ Moteur de blog
 
 ![Capture d’écran de DotClear 2](./doc/screenshots/ss2_dotclear.png)
 
-## Avertissements / informations importantes
-
-## Configuration
-
-How to configure this app: by an admin panel.
-
-#### Multi-users support
-
-Are LDAP supported? **Yes**  
-Are HTTP auth supported? **No** (PR are welcome!)  
-Can the app be used by multiple users? **Yes**
-
 ## Documentations et ressources
 
 * Site officiel de l’app : <https://dotclear.org>
 * Documentation officielle de l’admin : <https://dotclear.org/documentation/2.0>
 * Dépôt de code officiel de l’app : <https://git.dotclear.org/dev/dotclear>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_dotclear2>
+* YunoHost Store: <https://apps.yunohost.org/app/dotclear2>
 * Signaler un bug : <https://github.com/YunoHost-Apps/dotclear2_ynh/issues>
 
 ## Informations pour les développeurs
