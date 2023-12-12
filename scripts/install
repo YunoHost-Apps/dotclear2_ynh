@@ -10,98 +10,27 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-#=================================================
-# RETRIEVE ARGUMENTS FROM THE MANIFEST
-#=================================================
-
-domain=$YNH_APP_ARG_DOMAIN
-path_url=$YNH_APP_ARG_PATH
-is_public=$YNH_APP_ARG_IS_PUBLIC
-admin=$YNH_APP_ARG_ADMIN
-
-app=$YNH_APP_INSTANCE_NAME
-
-#=================================================
-# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
-#=================================================
-ynh_script_progression --message="Validating installation parameters..."
-
-final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
-
-# Register (book) web path
-ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
-
-#=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
-ynh_script_progression --message="Storing installation settings..."
-
-ynh_app_setting_set --app=$app --key=domain --value=$domain
-ynh_app_setting_set --app=$app --key=path --value=$path_url
-ynh_app_setting_set --app=$app --key=admin --value=$admin
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..." --weight=2
-
-# Create a system user
-ynh_system_user_create --username=$app --home_dir="$final_path"
-
-#=================================================
-# CREATE A MYSQL DATABASE
-#=================================================
-ynh_script_progression --message="Creating a MySQL database..." --weight=2
-
-db_name=$(ynh_sanitize_dbid --db_name=$app)
-db_user=$db_name
-ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
-db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
-
-#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=4
 
-ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+_dotclear2_setup_source
 
-# In case of a new version, the url change from http://download.dotclear.org/latest/dotclear-X.X.X.tar.gz to http://download.dotclear.org/attic/dotclear-X.X.X.tar.gz
-src_url=$(grep 'SOURCE_URL=' "../conf/app.src" | cut -d= -f2-)
-if ! curl --output /dev/null --silent --head --fail "$src_url"; then
-	ynh_replace_string --match_string="latest" --replace_string="attic" --target_file="../conf/app.src"
-fi
-
-# Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir="$final_path"
-
-chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:www-data "$final_path"
+chmod 750 "$install_dir"
+chmod -R o-rwx "$install_dir"
+chown -R $app:www-data "$install_dir"
 
 # https://dotclear.org/documentation/2.0/admin/install
-mkdir -p "$final_path/"{cache,public}
-setfacl -m d:u:www-data:rwx "$final_path/"{cache,public}
+mkdir -p "$install_dir/"{cache,public}
+setfacl -m d:u:www-data:rwx "$install_dir/"{cache,public}
 
 #=================================================
-# NGINX CONFIGURATION
+# SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring NGINX web server..."
+ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-ynh_script_progression --message="Configuring PHP-FPM..." --weight=2
 
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config
@@ -113,15 +42,19 @@ ynh_add_fpm_config
 #=================================================
 ynh_script_progression --message="Adding a configuration file..."
 
-php_config=$final_path/inc/config.php
+php_config=$install_dir/inc/config.php
+
+admin=$(yunohost user permission info "$app.admin" --output-as json | jq -r '.allowed | .[]')
 
 master_key=$(ynh_string_random --length=30)
 ynh_app_setting_set --app=$app --key=master_key --value=$master_key
 
 cp $php_config.in $php_config
 
-admin_url="${path_url%/}/admin/"
+admin_url="${path%/}/admin/"
 
+admin=$(yunohost user permission info "$app.admin" --output-as json | jq -r '.allowed | .[]')
+ynh_app_setting_set --app=$app --key=admin --value=$admin
 email=$(ynh_user_get_info --username=$admin --key=mail)
 
 # Config as if we called in admin/install/wizard.php
@@ -133,6 +66,7 @@ ynh_replace_string --match_string="'DC_DBNAME', ''" --replace_string="'DC_DBNAME
 ynh_replace_string --match_string="'DC_MASTER_KEY', ''" --replace_string="'DC_MASTER_KEY', '$master_key'" --target_file=$php_config
 ynh_replace_string --match_string="'DC_ADMIN_URL', ''" --replace_string="'DC_ADMIN_URL', 'https://$domain$admin_url'" --target_file=$php_config
 ynh_replace_string --match_string="'DC_ADMIN_MAILFROM', ''" --replace_string="'DC_ADMIN_MAILFROM', '$email'" --target_file=$php_config
+ynh_replace_string --match_string="//define('DC_NOT_UPDATE', false);" --replace_string="define('DC_NOT_UPDATE', true);" --target_file=$php_config
 
 # Adding LDAP login
 blog_admin="false"
@@ -145,6 +79,7 @@ blog_media_admin="false"
 blog_media="false"
 blog_pages="false"
 blog_blogroll="false"
+
 ynh_app_setting_set --app=$app --key=blog_admin --value=$blog_admin
 ynh_app_setting_set --app=$app --key=blog_contentadmin --value=$blog_contentadmin
 ynh_app_setting_set --app=$app --key=blog_usage --value=$blog_usage
@@ -156,11 +91,11 @@ ynh_app_setting_set --app=$app --key=blog_media --value=$blog_media
 ynh_app_setting_set --app=$app --key=blog_pages --value=$blog_pages
 ynh_app_setting_set --app=$app --key=blog_blogroll --value=$blog_blogroll
 
-ynh_add_config --template="../conf/class.auth.ldap.php" --destination="$final_path/inc/class.auth.ldap.php"
+ynh_add_config --template="../conf/class.auth.ldap.php" --destination="$install_dir/inc/class.auth.ldap.php"
 
 cat << EOF >> $php_config
 
-\$__autoload['ldapDcAuth'] = dirname(__FILE__).'/class.auth.ldap.php';
+require dirname(__FILE__).'/class.auth.ldap.php';
 define('DC_AUTH_CLASS','ldapDcAuth');
 EOF
 
@@ -172,16 +107,6 @@ chown $app:$app "$php_config"
 #=================================================
 # SETUP APPLICATION WITH CURL
 #=================================================
-ynh_script_progression --message="Setuping application with CURL..."
-
-# Set the app as temporarily public for curl call
-ynh_script_progression --message="Configuring SSOwat..."
-# Making the app public for curl
-ynh_permission_update --permission="main" --add="visitors"
-
-# Reload Nginx
-ynh_systemd_action --service_name=nginx --action=reload
-
 ynh_script_progression --message="Finalizing installation..." --weight=14
 
 firstname=$(ynh_user_get_info --username=$admin --key=firstname)
@@ -195,9 +120,6 @@ installUrl="/admin/install/index.php"
 
 ynh_local_curl $installUrl "u_email=$email" "u_firstname=$firstname" "u_name=$lastname" "u_login=$admin" "u_pwd=$password" "u_pwd2=$password"
 
-# Remove the public access
-ynh_permission_update --permission="main" --remove="visitors"
-
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
@@ -206,30 +128,9 @@ ynh_permission_update --permission="main" --remove="visitors"
 ynh_script_progression --message="Configuring Fail2Ban..."
 
 # Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in $final_path/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path_url%/}/admin/auth.php"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Configuring permissions..."
-
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	# Everyone can access the app.
-	# The "main" permission is automatically created before the install script.
-	ynh_permission_update --permission="main" --add="visitors"
-fi
-
-# Only the admin can access the admin panel of the app (if the app has an admin panel)
-ynh_permission_create --permission="admin" --url="/admin" --allowed=$admin
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
-
-ynh_systemd_action --service_name=nginx --action=reload
+ynh_add_fail2ban_config \
+	--logpath="/var/log/nginx/${domain}-error.log" \
+	--failregex="Invalid credentials in $install_dir/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path%/}/admin/auth.php"
 
 #=================================================
 # END OF SCRIPT

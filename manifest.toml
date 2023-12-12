@@ -1,0 +1,80 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
+packaging_format = 2
+
+id = "dotclear2"
+name = "DotClear 2"
+description.en = "Blog publishing application"
+description.fr = "Moteur de blog"
+
+version = "2.27.3~ynh1"
+
+maintainers = ["kay0u"]
+
+[upstream]
+license = "GPL-2.0-or-later"
+website = "https://dotclear.org"
+demo = "https://www.softaculous.com/demos/Dotclear"
+admindoc = "https://dotclear.org/documentation/2.0"
+code = "https://git.dotclear.org/dev/dotclear"
+cpe = "cpe:2.3:a:dotclear:dotclear"
+fund = "https://dotclear.org/donate"
+
+[integration]
+yunohost = ">= 11.2"
+architectures = "all"
+multi_instance = true
+
+ldap = true
+
+sso = false
+
+disk = "50M"
+ram.build = "200M"
+ram.runtime = "50M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.path]
+    type = "path"
+    default = "/dotclear2"
+
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
+    [install.init_admin_permission]
+    ask.en = "Choose the Dotclear super user."
+    ask.fr = "Choisissez le super utilisateur Dotclear."
+    help.en = "You can later on give admin permission to more users."
+    help.fr = "Vous pourrez ultérieurement accorder l’autorisation d’administrateur à davantage d’utilisateurs."
+    type = "user"
+
+[resources]
+    [resources.sources.latest]
+    prefetch = false
+    in_subdir = 2
+    url = "https://download.dotclear.org/latest/dotclear-2.27.3.tar.gz"
+    sha256 = "86d31cd9f1d8f3147555858c339adb6752db9e8585731eddf697bb1e3fba80c6"
+
+    [resources.sources.attic]
+    prefetch = false
+    in_subdir = 2
+    url = "https://download.dotclear.org/attic/dotclear-2.27.3.tar.gz"
+    sha256 = "86d31cd9f1d8f3147555858c339adb6752db9e8585731eddf697bb1e3fba80c6"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+    main.url = "/"
+    admin.show_tile = false
+
+    [resources.apt]
+    packages = "mariadb-server, php8.2, php8.2-fpm, php8.2-mbstring, php8.2-mysql, php-iconv, php8.2-xml, php8.2-cli, php8.2-intl, php8.2-ldap, php8.2-gd"
+
+    [resources.database]
+    type = "mysql"

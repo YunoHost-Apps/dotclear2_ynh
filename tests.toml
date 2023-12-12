@@ -1,0 +1,13 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/tests.v1.schema.json
+
+test_format = 1.0
+
+[default]
+
+    args.init_admin_permission="package_checker"
+
+    test_upgrade_from.6d4eeccdddff2e4fa5476bcf1b4884d3d1c466eb.name = "2.24.1~ynh1"
+    test_upgrade_from.6d4eeccdddff2e4fa5476bcf1b4884d3d1c466eb.args.domain="domain.tld"
+    test_upgrade_from.6d4eeccdddff2e4fa5476bcf1b4884d3d1c466eb.args.path="/dotclear2"
+    test_upgrade_from.6d4eeccdddff2e4fa5476bcf1b4884d3d1c466eb.args.admin="package_checker"
+    test_upgrade_from.6d4eeccdddff2e4fa5476bcf1b4884d3d1c466eb.args.is_public="true"

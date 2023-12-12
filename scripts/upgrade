@@ -10,102 +10,27 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_script_progression --message="Loading installation settings..."
-
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-db_name=$(ynh_app_setting_get --app=$app --key=db_name)
-db_user=$db_name
-db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
-password=$(ynh_app_setting_get --app=$app --key=password)
-master_key=$(ynh_app_setting_get --app=$app --key=master_key)
-
-blog_admin=$(ynh_app_setting_get --app=$app --key=blog_admin)
-blog_contentadmin=$(ynh_app_setting_get --app=$app --key=blog_contentadmin)
-blog_usage=$(ynh_app_setting_get --app=$app --key=blog_usage)
-blog_publish=$(ynh_app_setting_get --app=$app --key=blog_publish)
-blog_delete=$(ynh_app_setting_get --app=$app --key=blog_delete)
-blog_categories=$(ynh_app_setting_get --app=$app --key=blog_categories)
-blog_media_admin=$(ynh_app_setting_get --app=$app --key=blog_media_admin)
-blog_media=$(ynh_app_setting_get --app=$app --key=blog_media)
-blog_pages=$(ynh_app_setting_get --app=$app --key=blog_pages)
-blog_blogroll=$(ynh_app_setting_get --app=$app --key=blog_blogroll)
-
-#=================================================
 # CHECK VERSION
 #=================================================
-ynh_script_progression --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=4
-
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	# Restore it if the upgrade fails
-	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
 
 #=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..."
+ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
-# If db_name doesn't exist, create it
-if [ -z "$db_name" ]; then
-	db_name=$(ynh_sanitize_dbid --db_name=$app)
-	ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-fi
-
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/var/www/$app
-	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-fi
-
-if [ -n "$(ynh_app_setting_get --app=$app --key=is_public)" ]; then
-	ynh_app_setting_delete --app=$app --key=protected_uris
-
-	# Removing skipped/unprotected_uris under certain conditions, remove the visitors group added during the migration process of 3.7
-	# Remove unprotected_uris. If the app was public, add visitors again to the main permission
-	if ynh_permission_has_user --permission=main --user=visitors
-	then
-		ynh_app_setting_delete --app=$app --key=unprotected_uris
-		ynh_permission_update --permission "main" --add "visitors"
-	else
-		ynh_app_setting_delete --app=$app --key=unprotected_uris
-	fi
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-if ! ynh_permission_exists --permission="admin"; then
-	# Create the required permissions
-	ynh_permission_create --permission="admin" --url="/admin" --allowed=$admin
-fi
-
-if [ -z "$blog_admin" ] ||
- [ -z "$blog_contentadmin" ] || 
- [ -z "$blog_usage" ] || 
- [ -z "$blog_publish" ] || 
- [ -z "$blog_delete" ] || 
- [ -z "$blog_categories" ] || 
- [ -z "$blog_media_admin" ] || 
- [ -z "$blog_media" ] || 
- [ -z "$blog_pages" ] || 
+if [ -z "${blog_admin:-}" ] ||
+ [ -z "$blog_contentadmin" ] ||
+ [ -z "$blog_usage" ] ||
+ [ -z "$blog_publish" ] ||
+ [ -z "$blog_delete" ] ||
+ [ -z "$blog_categories" ] ||
+ [ -z "$blog_media_admin" ] ||
+ [ -z "$blog_media" ] ||
+ [ -z "$blog_pages" ] ||
  [ -z "$blog_blogroll" ]; then
 	blog_admin="false"
 	blog_contentadmin="false"
@@ -117,25 +42,17 @@ if [ -z "$blog_admin" ] ||
 	blog_media="false"
 	blog_pages="false"
 	blog_blogroll="false"
-	ynh_app_setting_set --app=$app --key=blog_admin --value=$blog_admin
-	ynh_app_setting_set --app=$app --key=blog_contentadmin --value=$blog_contentadmin
+ 	ynh_app_setting_set --app=$app --key=blog_admin --value=$blog_admin
+ 	ynh_app_setting_set --app=$app --key=blog_contentadmin --value=$blog_contentadmin
 	ynh_app_setting_set --app=$app --key=blog_usage --value=$blog_usage
 	ynh_app_setting_set --app=$app --key=blog_publish --value=$blog_publish
 	ynh_app_setting_set --app=$app --key=blog_delete --value=$blog_delete
 	ynh_app_setting_set --app=$app --key=blog_categories --value=$blog_categories
-	ynh_app_setting_set --app=$app --key=blog_media_admin --value=$blog_media_admin
+ 	ynh_app_setting_set --app=$app --key=blog_media_admin --value=$blog_media_admin
 	ynh_app_setting_set --app=$app --key=blog_media --value=$blog_media
 	ynh_app_setting_set --app=$app --key=blog_pages --value=$blog_pages
 	ynh_app_setting_set --app=$app --key=blog_blogroll --value=$blog_blogroll
 fi
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..."
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir=$final_path
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -143,38 +60,25 @@ ynh_system_user_create --username=$app --home_dir=$final_path
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-	# Download, check integrity, uncompress and patch the source from app.src
-	# In case of a new version, the url change from http://download.dotclear.org/latest/dotclear-X.X.X.tar.gz to http://download.dotclear.org/attic/dotclear-X.X.X.tar.gz
-	src_url=$(grep 'SOURCE_URL=' "../conf/app.src" | cut -d= -f2-)
-	if ! curl --output /dev/null --silent --head --fail "$src_url"; then
-		ynh_replace_string "latest" "attic" ../conf/app.src
-	fi
 	ynh_script_progression --message="Upgrading source files..."
 
-	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$final_path"
+	_dotclear2_setup_source
 fi
 
-chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:www-data "$final_path"
+chmod -R o-rwx "$install_dir"
+chown -R $app:www-data "$install_dir"
 
 # https://dotclear.org/documentation/2.0/admin/install
-mkdir -p "$final_path/"{cache,public}
-setfacl -m d:u:www-data:rwx "$final_path/"{cache,public}
+mkdir -p "$install_dir/"{cache,public}
+setfacl -m d:u:www-data:rwx "$install_dir/"{cache,public}
 
 #=================================================
-# NGINX CONFIGURATION
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..."
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
 
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config
@@ -184,15 +88,15 @@ ynh_add_fpm_config
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating a configuration file..."
+ynh_script_progression --message="Updating a configuration file..." --weight=1
 
-php_config=$final_path/inc/config.php
+php_config=$install_dir/inc/config.php
 
 ynh_backup_if_checksum_is_different --file=$php_config
 
 cp $php_config.in $php_config
 
-admin_url="${path_url%/}/admin/"
+admin_url="${path%/}/admin/"
 
 email=$(ynh_user_get_info --username=$admin --key=mail)
 
@@ -205,13 +109,14 @@ ynh_replace_string --match_string="'DC_DBNAME', ''" --replace_string="'DC_DBNAME
 ynh_replace_string --match_string="'DC_MASTER_KEY', ''" --replace_string="'DC_MASTER_KEY', '$master_key'" --target_file=$php_config
 ynh_replace_string --match_string="'DC_ADMIN_URL', ''" --replace_string="'DC_ADMIN_URL', 'https://$domain$admin_url'" --target_file=$php_config
 ynh_replace_string --match_string="'DC_ADMIN_MAILFROM', ''" --replace_string="'DC_ADMIN_MAILFROM', '$email'" --target_file=$php_config
+ynh_replace_string --match_string="//define('DC_NOT_UPDATE', false);" --replace_string="define('DC_NOT_UPDATE', true);" --target_file=$php_config
 
 # Adding LDAP login
-ynh_add_config --template="../conf/class.auth.ldap.php" --destination="$final_path/inc/class.auth.ldap.php"
+ynh_add_config --template="../conf/class.auth.ldap.php" --destination="$install_dir/inc/class.auth.ldap.php"
 
 cat << EOF >> $php_config
 
-\$__autoload['ldapDcAuth'] = dirname(__FILE__).'/class.auth.ldap.php';
+require dirname(__FILE__).'/class.auth.ldap.php';
 define('DC_AUTH_CLASS','ldapDcAuth');
 EOF
 
@@ -234,18 +139,10 @@ ynh_local_curl $adminUrl
 #=================================================
 # UPGRADE FAIL2BAN
 #=================================================
-ynh_script_progression --message="Reconfiguring Fail2Ban..."
+ynh_script_progression --message="Reconfiguring Fail2Ban..." --weight=1
 
 # Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in $final_path/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path_url%/}/admin/auth.php"
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server and PHP-FRM..."
-
-ynh_systemd_action --service_name=nginx --action=reload
-ynh_systemd_action --service_name=php$YNH_PHP_VERSION-fpm --action=reload
+ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in $install_dir/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path%/}/admin/auth.php"
 
 #=================================================
 # END OF SCRIPT

@@ -16,27 +16,16 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 ## Overview
 
-Blog publishing application
+Dotclear is an open-source web publishing software. Dotclear project's purpose is to provide a user-friendly tool allowing anyone to publish on the web, regardless of their technical skills.
 
-**Shipped version:** 2.24.1~ynh1
+
+**Shipped version:** 2.27.3~ynh1
 
 **Demo:** https://www.softaculous.com/demos/Dotclear
 
 ## Screenshots
 
 ![Screenshot of DotClear 2](./doc/screenshots/ss2_dotclear.png)
-
-## Disclaimers / important information
-
-## Configuration
-
-How to configure this app: by an admin panel.
-
-#### Multi-users support
-
-Are LDAP supported? **Yes**  
-Are HTTP auth supported? **No** (PR are welcome!)  
-Can the app be used by multiple users? **Yes**
 
 ## Documentation and resources
 

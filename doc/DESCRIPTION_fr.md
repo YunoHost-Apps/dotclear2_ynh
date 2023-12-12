@@ -1,0 +1,1 @@
+Dotclear est un logiciel de publication Web open source. L'objectif du projet Dotclear est de fournir un outil convivial permettant à chacun de publier sur le Web, quelles que soient ses compétences techniques.

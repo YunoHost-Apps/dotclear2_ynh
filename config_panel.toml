@@ -9,7 +9,7 @@ name = "Dotclear2 configuration"
         [main.super_user.admin]
         ask = "Super Administrator"
         type = "user"
-        bind = "super_user:__FINALPATH__/inc/class.auth.ldap.php"
+        bind = "super_user:__INSTALL_DIR__/inc/class.auth.ldap.php"
 
 [ynh_users]
 name = "Yunohost users"
@@ -23,7 +23,7 @@ help = "These permissions apply to the first connection of the user, the super u
         type = "boolean"
         yes = "true"
         no = "false"
-        bind = "'admin':__FINALPATH__/inc/class.auth.ldap.php"
+        bind = "'admin':__INSTALL_DIR__/inc/class.auth.ldap.php"
 
         [ynh_users.content]
         name = "Content permissions"
@@ -34,14 +34,14 @@ help = "These permissions apply to the first connection of the user, the super u
             type = "boolean"
             yes = "true"
             no = "false"
-            bind = "'contentadmin':__FINALPATH__/inc/class.auth.ldap.php"
+            bind = "'contentadmin':__INSTALL_DIR__/inc/class.auth.ldap.php"
 
             [ynh_users.content.blog_usage]
             ask = "Manage their own entries and comments"
             type = "boolean"
             yes = "true"
             no = "false"
-            bind = "'usage':__FINALPATH__/inc/class.auth.ldap.php"
+            bind = "'usage':__INSTALL_DIR__/inc/class.auth.ldap.php"
             visible = "blog_contentadmin != 'true'"
 
             [ynh_users.content.blog_publish]
@@ -49,7 +49,7 @@ help = "These permissions apply to the first connection of the user, the super u
             type = "boolean"
             yes = "true"
             no = "false"
-            bind = "'publish':__FINALPATH__/inc/class.auth.ldap.php"
+            bind = "'publish':__INSTALL_DIR__/inc/class.auth.ldap.php"
             visible = "blog_contentadmin != 'true'"
 
             [ynh_users.content.blog_delete]
@@ -57,7 +57,7 @@ help = "These permissions apply to the first connection of the user, the super u
             type = "boolean"
             yes = "true"
             no = "false"
-            bind = "'delete':__FINALPATH__/inc/class.auth.ldap.php"
+            bind = "'delete':__INSTALL_DIR__/inc/class.auth.ldap.php"
             visible = "blog_contentadmin != 'true'"
 
         [ynh_users.media]
@@ -69,14 +69,14 @@ help = "These permissions apply to the first connection of the user, the super u
             type = "boolean"
             yes = "true"
             no = "false"
-            bind = "'media_admin':__FINALPATH__/inc/class.auth.ldap.php"
+            bind = "'media_admin':__INSTALL_DIR__/inc/class.auth.ldap.php"
 
             [ynh_users.media.blog_media]
             ask = "Manage their own media items"
             type = "boolean"
             yes = "true"
             no = "false"
-            bind = "'media':__FINALPATH__/inc/class.auth.ldap.php"
+            bind = "'media':__INSTALL_DIR__/inc/class.auth.ldap.php"
             visible = "blog_media_admin != 'true'"
 
         [ynh_users.other_permissions]
@@ -88,18 +88,18 @@ help = "These permissions apply to the first connection of the user, the super u
             type = "boolean"
             yes = "true"
             no = "false"
-            bind = "'categories':__FINALPATH__/inc/class.auth.ldap.php"
+            bind = "'categories':__INSTALL_DIR__/inc/class.auth.ldap.php"
 
             [ynh_users.other_permissions.blog_pages]
             ask = "Manage pages"
             type = "boolean"
             yes = "true"
             no = "false"
-            bind = "'pages':__FINALPATH__/inc/class.auth.ldap.php"
+            bind = "'pages':__INSTALL_DIR__/inc/class.auth.ldap.php"
 
             [ynh_users.other_permissions.blog_blogroll]
             ask = "Manage blogroll"
             type = "boolean"
             yes = "true"
             no = "false"
-            bind = "'blogroll':__FINALPATH__/inc/class.auth.ldap.php"
+            bind = "'blogroll':__INSTALL_DIR__/inc/class.auth.ldap.php"
