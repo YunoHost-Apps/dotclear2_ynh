@@ -14,15 +14,15 @@
 #=================================================
 
 # Fetching information
-current_version=$(cat manifest.json | jq -j '.version|split("~")[0]')
-repo=$(cat manifest.json | jq -j '.upstream.code|split("https://github.com/")[1]')
+current_version=$(cat manifest.toml | grep "version =" | sed 's|version = "\(.*\)~ynh[0-9]*"|\1|')
+# repo=$(cat manifest.json | jq -j '.upstream.code|split("https://github.com/")[1]')
 asset=$(curl --silent "https://download.dotclear.org/latest/" | grep "dotclear-.*?.zip" -Po | head -1)
 version=${asset%.zip}
 version=${version#dotclear-}
 
 # Later down the script, we assume the version has only digits and dots
 # Sometimes the release name starts with a "v", so let's filter it out.
-# You may need more tweaks here if the upstream repository has different naming conventions. 
+# You may need more tweaks here if the upstream repository has different naming conventions.
 if [[ ${version:0:1} == "v" || ${version:0:1} == "V" ]]; then
     version=${version:1}
 fi
@@ -54,7 +54,7 @@ src="app"
 tempdir="$(mktemp -d)"
 
 # Download sources and calculate checksum
-curl --silent -4 -L http://download.dotclear.org/latest/dotclear-$version.zip -o "$tempdir/$asset"
+curl --silent -4 -L http://download.dotclear.org/latest/dotclear-$version.tar.gz -o "$tempdir/$asset"
 checksum=$(sha256sum "$tempdir/$asset" | head -c 64)
 
 # Delete temporary directory
@@ -66,17 +66,10 @@ if [[ $asset == *.zip ]]; then
 fi
 
 # Rewrite source file
-cat <<EOT > conf/$src.src
-SOURCE_URL=http://download.dotclear.org/latest/dotclear-$version.zip
-SOURCE_SUM=$checksum
-SOURCE_SUM_PRG=sha256sum
-SOURCE_FORMAT=$extension
-SOURCE_IN_SUBDIR=true
-SOURCE_FILENAME=
-SOURCE_EXTRACT=true
-EOT
-echo "... conf/$src.src updated"
-
+set -x
+sed -i "s|/dotclear-.*.tar.gz|/dotclear-$version.tar.gz|" manifest.toml
+sed -i "s|sha256 = \".*\"|sha256 = \"$checksum\"|" manifest.toml
+sed -i "s|version = \".*\"|version = \"$version~ynh1\"|" manifest.toml
 #=================================================
 # SPECIFIC UPDATE STEPS
 #=================================================
@@ -87,9 +80,6 @@ echo "... conf/$src.src updated"
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
-
-# Replace new version in manifest
-echo "$(jq -s --indent 4 ".[] | .version = \"$version~ynh1\"" manifest.json)" > manifest.json
 
 # No need to update the README, yunohost-bot takes care of it
 
