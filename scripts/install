@@ -14,13 +14,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=4
 
-# In case of a new version, the url change from http://download.dotclear.org/latest/dotclear-X.X.X.tar.gz to http://download.dotclear.org/attic/dotclear-X.X.X.tar.gz
-src_url=$(cat $YNH_APP_BASEDIR/manifest.toml | toml_to_json | jq '.resources.sources.latest.url' -r)
-if ! curl --output /dev/null --silent --head --fail "$src_url"; then
-	ynh_setup_source --dest_dir="$install_dir" --source_id="attic"
-else
-	ynh_setup_source --dest_dir="$install_dir" --source_id="latest"
-fi
+_dotclear2_setup_source
 
 chmod 750 "$install_dir"
 chmod -R o-rwx "$install_dir"
@@ -134,7 +128,9 @@ ynh_local_curl $installUrl "u_email=$email" "u_firstname=$firstname" "u_name=$la
 ynh_script_progression --message="Configuring Fail2Ban..."
 
 # Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/nginx/${domain}-error.log" --failregex="Invalid credentials in $install_dir/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path%/}/admin/auth.php"
+ynh_add_fail2ban_config \
+	--logpath="/var/log/nginx/${domain}-error.log" \
+	--failregex="Invalid credentials in $install_dir/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path%/}/admin/auth.php"
 
 #=================================================
 # END OF SCRIPT
