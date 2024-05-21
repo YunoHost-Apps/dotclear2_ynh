@@ -1,13 +1,15 @@
 <?php
+use Dotclear\App;
+use Dotclear\Core\Auth;
 class ldapDcAuth extends Auth
 {
     # The user can't change his password
-    protected $allow_pass_change = false;
+    protected bool $allow_pass_change = false;
 
     # LDAP parameter
-    private $server = "localhost";
-    private $port = "389";
-    private $base = "dc=yunohost,dc=org";
+    private string $server = "localhost";
+    private string $port = "389";
+    private string $base = "dc=yunohost,dc=org";
 
     public function checkUser(string $user_id, ?string $pwd = NULL, ?string $user_key = NULL, bool $check_blog = true): bool
     {
@@ -56,9 +58,9 @@ class ldapDcAuth extends Auth
                         }
 
                         # If the user exist, then we just update his password.
-                        if (dcCore::app()->userExists($user_id))
+                        if (App::users()->userExists($user_id))
                         {
-                            $this->sudo(array(dcCore::app(), 'updUser'), $user_id, $cur);
+                            $this->sudo(array(App::users(), 'updUser'), $user_id, $cur);
                         }
                         # If not, we create him.
                         # In order for him to connect,
@@ -69,7 +71,7 @@ class ldapDcAuth extends Auth
                             $cur->user_lang = 'fr';                         # Can change this, PR are welcome
                             $cur->user_tz = 'Europe/Paris';                 # Can change this, PR are welcome
                             $cur->user_default_blog = 'default';            # Can change this, PR are welcome
-                            $this->sudo(array(dcCore::app(),'addUser'), $cur);
+                            $this->sudo(array(App::users(),'addUser'), $cur);
                             # Possible roles:
                             # admin "administrator"
                             #   contentadmin "manage all entries and comments"
@@ -100,7 +102,7 @@ class ldapDcAuth extends Auth
                                     $set_perms[$perm_id] = true;
                                 }
                             }
-                            $this->sudo(array(dcCore::app(), 'setUserBlogPermissions'), $user_id, 'default', $set_perms, true);
+                            $this->sudo(array(App::users(), 'setUserBlogPermissions'), $user_id, 'default', $set_perms, true);
                         }
 
                         $this->con->commit();
