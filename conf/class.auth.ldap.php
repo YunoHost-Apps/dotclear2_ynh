@@ -1,5 +1,5 @@
 <?php
-class ldapDcAuth extends Auth
+class ldapDcAuth extends dcAuth
 {
     # The user can't change his password
     protected $allow_pass_change = false;
