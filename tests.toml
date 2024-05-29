@@ -6,8 +6,8 @@ test_format = 1.0
 
     args.init_admin_permission="package_checker"
 
-    test_upgrade_from.6d4eeccdddff2e4fa5476bcf1b4884d3d1c466eb.name = "2.24.1~ynh1"
-    test_upgrade_from.6d4eeccdddff2e4fa5476bcf1b4884d3d1c466eb.args.domain="domain.tld"
-    test_upgrade_from.6d4eeccdddff2e4fa5476bcf1b4884d3d1c466eb.args.path="/dotclear2"
-    test_upgrade_from.6d4eeccdddff2e4fa5476bcf1b4884d3d1c466eb.args.admin="package_checker"
-    test_upgrade_from.6d4eeccdddff2e4fa5476bcf1b4884d3d1c466eb.args.is_public="true"
+    test_upgrade_from.bca9fa0e72faf78e020e0483f76b89c28c7620cf.name = "2.27.3~ynh1"
+    test_upgrade_from.bca9fa0e72faf78e020e0483f76b89c28c7620cf.args.domain="domain.tld"
+    test_upgrade_from.bca9fa0e72faf78e020e0483f76b89c28c7620cf.args.path="/dotclear2"
+    test_upgrade_from.bca9fa0e72faf78e020e0483f76b89c28c7620cf.args.admin="package_checker"
+    test_upgrade_from.bca9fa0e72faf78e020e0483f76b89c28c7620cf.args.is_public="true"
