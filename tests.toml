@@ -11,3 +11,4 @@ test_format = 1.0
     test_upgrade_from.bca9fa0e72faf78e020e0483f76b89c28c7620cf.args.path="/dotclear2"
     test_upgrade_from.bca9fa0e72faf78e020e0483f76b89c28c7620cf.args.admin="package_checker"
     test_upgrade_from.bca9fa0e72faf78e020e0483f76b89c28c7620cf.args.is_public="true"
+    test_upgrade_from.bca9fa0e72faf78e020e0483f76b89c28c7620cf.args.init_admin_permission="package_checker"
