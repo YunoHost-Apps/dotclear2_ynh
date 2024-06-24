@@ -58,7 +58,7 @@ fi
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
-if ynh_compare_current_package_version --comparison lt --version 2.30.0; then
+if ynh_compare_current_package_version --comparison lt --version 2.30.0~ynh1; then
 	ynh_print_warn --message="Disable all plugins before the migration. To reactivate them, navigate to all plugins at $install_dir/plugins/, and remove each \"_disabled\" file one by one, and make sure you blog works as expected after each deletion"
 	for folder in "$install_dir"/plugins/*/
 	do
