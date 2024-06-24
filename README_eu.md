@@ -19,7 +19,7 @@ EZ editatu eskuz.
 Dotclear is an open-source web publishing software. Dotclear project's purpose is to provide a user-friendly tool allowing anyone to publish on the web, regardless of their technical skills.
 
 
-**Paketatutako bertsioa:** 2.27.3~ynh1
+**Paketatutako bertsioa:** 2.30.1~ynh1
 
 **Demoa:** <https://www.softaculous.com/demos/Dotclear>
 
