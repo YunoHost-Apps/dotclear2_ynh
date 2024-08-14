@@ -5,7 +5,7 @@ EZ editatu eskuz.
 
 # DotClear 2 YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/dotclear2.svg)](https://dash.yunohost.org/appci/app/dotclear2) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)
+[![Integrazio maila](https://dash.yunohost.org/integration/dotclear2.svg)](https://ci-apps.yunohost.org/ci/apps/dotclear2/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)
 
 [![Instalatu DotClear 2 YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=dotclear2)
 
@@ -19,7 +19,7 @@ EZ editatu eskuz.
 Dotclear is an open-source web publishing software. Dotclear project's purpose is to provide a user-friendly tool allowing anyone to publish on the web, regardless of their technical skills.
 
 
-**Paketatutako bertsioa:** 2.30.1~ynh1
+**Paketatutako bertsioa:** 2.31~ynh1
 
 **Demoa:** <https://www.softaculous.com/demos/Dotclear>
 
