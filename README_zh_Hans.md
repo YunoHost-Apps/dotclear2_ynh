@@ -5,7 +5,7 @@
 
 # YunoHost 上的 DotClear 2
 
-[![集成程度](https://dash.yunohost.org/integration/dotclear2.svg)](https://dash.yunohost.org/appci/app/dotclear2) ![工作状态](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)
+[![集成程度](https://dash.yunohost.org/integration/dotclear2.svg)](https://ci-apps.yunohost.org/ci/apps/dotclear2/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)
 
 [![使用 YunoHost 安装 DotClear 2](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=dotclear2)
 
@@ -19,7 +19,7 @@
 Dotclear is an open-source web publishing software. Dotclear project's purpose is to provide a user-friendly tool allowing anyone to publish on the web, regardless of their technical skills.
 
 
-**分发版本：** 2.30.1~ynh1
+**分发版本：** 2.31.1~ynh1
 
 **演示：** <https://www.softaculous.com/demos/Dotclear>
 
