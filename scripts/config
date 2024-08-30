@@ -1,21 +1,15 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC STARTING
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source /usr/share/yunohost/helpers
 
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # RETRIEVE ARGUMENTS
 #=================================================
 
-install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
+install_dir=$(ynh_app_setting_get --key=install_dir)
+admin=$(ynh_app_setting_get --key=admin)
 
 #=================================================
 # SPECIFIC SETTERS FOR TOML SHORT KEYS
@@ -55,19 +49,19 @@ set__blogs_list() {
         if [ ynh_permission_exists --permission="$id" ]; then
             ynh_permission_delete --permission="$id"
         fi
-        ynh_secure_remove --file="/etc/nginx/conf.d/${old_domain_array[$id]}.d/$app.conf"
+        ynh_safe_rm "/etc/nginx/conf.d/${old_domain_array[$id]}.d/$app.conf"
     done
 
     for id in $domain_array; do
-    
+
         if [ $domain_array[$id] != $old_domain_array[$id] ]; then
             mv /etc/nginx/conf.d/${old_domain_array[$id]}.d/$app.conf /etc/nginx/conf.d/${domain_array[$id]}.d/$app.conf
         fi
-        
+
         if [ $path_array[$id] != $old_path_array[$id] ]; then
             domain=$domain_array[$id]
             path=$path_array[$id]
-            ynh_add_config --template="nginx.conf" --destination="/etc/nginx/conf.d/${domain_array[$id]}.d/$app.conf"
+            ynh_config_add --template="nginx.conf" --destination="/etc/nginx/conf.d/${domain_array[$id]}.d/$app.conf"
         fi
 
         if [ ynh_permission_exists --permission="$id" ]; then
@@ -77,13 +71,11 @@ set__blogs_list() {
             ynh_permission_create --permission="$id" --url="$domain_array[$id]$path_array[$id]"
             ynh_permission_create --permission="$id.admin" --url="$domain_array[$id]$path_array[$id]/admin"
         fi
-        
+
     done
-    
+
     ynh_app_setting_set $app blogs_list $blogs_list
 }
 
-#=================================================
-# GENERIC FINALIZATION
 #=================================================
 ynh_app_config_run $1
