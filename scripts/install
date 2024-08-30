@@ -1,25 +1,18 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Setting up source files..." --weight=4
+ynh_script_progression "Setting up source files..."
 
 _dotclear2_setup_source
 
-chmod 750 "$install_dir"
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
-
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 750 "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:www-data "$install_dir"
 # https://dotclear.org/documentation/2.0/admin/install
 mkdir -p "$install_dir/"{cache,public}
 setfacl -m d:u:www-data:rwx "$install_dir/"{cache,public}
@@ -27,46 +20,46 @@ setfacl -m d:u:www-data:rwx "$install_dir/"{cache,public}
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
+ynh_script_progression "Adding system configurations related to $app..."
 
 # Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config
+ynh_config_add_phpfpm
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a configuration file..."
+ynh_script_progression "Adding $app's configuration..."
 
 php_config=$install_dir/inc/config.php
 
 admin=$(yunohost user permission info "$app.admin" --output-as json | jq -r '.allowed | .[]')
 
 master_key=$(ynh_string_random --length=30)
-ynh_app_setting_set --app=$app --key=master_key --value=$master_key
+ynh_app_setting_set --key=master_key --value=$master_key
 
 cp $php_config.in $php_config
 
 admin_url="${path%/}/admin/"
 
 admin=$(yunohost user permission info "$app.admin" --output-as json | jq -r '.allowed | .[]')
-ynh_app_setting_set --app=$app --key=admin --value=$admin
+ynh_app_setting_set --key=admin --value=$admin
 email=$(ynh_user_get_info --username=$admin --key=mail)
 
 # Config as if we called in admin/install/wizard.php
-ynh_replace_string --match_string="'DC_DBDRIVER', ''" --replace_string="'DC_DBDRIVER', 'mysqli'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_DBHOST', ''" --replace_string="'DC_DBHOST', 'localhost'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_DBUSER', ''" --replace_string="'DC_DBUSER', '$db_user'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_DBPASSWORD', ''" --replace_string="'DC_DBPASSWORD', '$db_pwd'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_DBNAME', ''" --replace_string="'DC_DBNAME', '$db_name'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_MASTER_KEY', ''" --replace_string="'DC_MASTER_KEY', '$master_key'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_ADMIN_URL', ''" --replace_string="'DC_ADMIN_URL', 'https://$domain$admin_url'" --target_file=$php_config
-ynh_replace_string --match_string="'DC_ADMIN_MAILFROM', ''" --replace_string="'DC_ADMIN_MAILFROM', '$email'" --target_file=$php_config
-ynh_replace_string --match_string="//define('DC_NOT_UPDATE', false);" --replace_string="define('DC_NOT_UPDATE', true);" --target_file=$php_config
+ynh_replace --match="'DC_DBDRIVER', ''" --replace="'DC_DBDRIVER', 'mysqli'" --file=$php_config
+ynh_replace --match="'DC_DBHOST', ''" --replace="'DC_DBHOST', 'localhost'" --file=$php_config
+ynh_replace --match="'DC_DBUSER', ''" --replace="'DC_DBUSER', '$db_user'" --file=$php_config
+ynh_replace --match="'DC_DBPASSWORD', ''" --replace="'DC_DBPASSWORD', '$db_pwd'" --file=$php_config
+ynh_replace --match="'DC_DBNAME', ''" --replace="'DC_DBNAME', '$db_name'" --file=$php_config
+ynh_replace --match="'DC_MASTER_KEY', ''" --replace="'DC_MASTER_KEY', '$master_key'" --file=$php_config
+ynh_replace --match="'DC_ADMIN_URL', ''" --replace="'DC_ADMIN_URL', 'https://$domain$admin_url'" --file=$php_config
+ynh_replace --match="'DC_ADMIN_MAILFROM', ''" --replace="'DC_ADMIN_MAILFROM', '$email'" --file=$php_config
+ynh_replace --match="//define('DC_NOT_UPDATE', false);" --replace="define('DC_NOT_UPDATE', true);" --file=$php_config
 
 # Adding LDAP login
 blog_admin="false"
@@ -80,18 +73,18 @@ blog_media="false"
 blog_pages="false"
 blog_blogroll="false"
 
-ynh_app_setting_set --app=$app --key=blog_admin --value=$blog_admin
-ynh_app_setting_set --app=$app --key=blog_contentadmin --value=$blog_contentadmin
-ynh_app_setting_set --app=$app --key=blog_usage --value=$blog_usage
-ynh_app_setting_set --app=$app --key=blog_publish --value=$blog_publish
-ynh_app_setting_set --app=$app --key=blog_delete --value=$blog_delete
-ynh_app_setting_set --app=$app --key=blog_categories --value=$blog_categories
-ynh_app_setting_set --app=$app --key=blog_media_admin --value=$blog_media_admin
-ynh_app_setting_set --app=$app --key=blog_media --value=$blog_media
-ynh_app_setting_set --app=$app --key=blog_pages --value=$blog_pages
-ynh_app_setting_set --app=$app --key=blog_blogroll --value=$blog_blogroll
+ynh_app_setting_set --key=blog_admin --value=$blog_admin
+ynh_app_setting_set --key=blog_contentadmin --value=$blog_contentadmin
+ynh_app_setting_set --key=blog_usage --value=$blog_usage
+ynh_app_setting_set --key=blog_publish --value=$blog_publish
+ynh_app_setting_set --key=blog_delete --value=$blog_delete
+ynh_app_setting_set --key=blog_categories --value=$blog_categories
+ynh_app_setting_set --key=blog_media_admin --value=$blog_media_admin
+ynh_app_setting_set --key=blog_media --value=$blog_media
+ynh_app_setting_set --key=blog_pages --value=$blog_pages
+ynh_app_setting_set --key=blog_blogroll --value=$blog_blogroll
 
-ynh_add_config --template="../conf/class.auth.ldap.php" --destination="$install_dir/inc/class.auth.ldap.php"
+ynh_config_add --template="class.auth.ldap.php" --destination="$install_dir/inc/class.auth.ldap.php"
 
 cat << EOF >> $php_config
 
@@ -99,7 +92,7 @@ require dirname(__FILE__).'/class.auth.ldap.php';
 define('DC_AUTH_CLASS','ldapDcAuth');
 EOF
 
-ynh_store_file_checksum --file=$php_config
+ynh_store_file_checksum $php_config
 
 chmod 400 "$php_config"
 chown $app:$app "$php_config"
@@ -107,7 +100,7 @@ chown $app:$app "$php_config"
 #=================================================
 # SETUP APPLICATION WITH CURL
 #=================================================
-ynh_script_progression --message="Finalizing installation..." --weight=14
+ynh_script_progression "Finalizing installation..."
 
 firstname=$(ynh_user_get_info --username=$admin --key=firstname)
 lastname=$(ynh_user_get_info --username=$admin --key=lastname)
@@ -121,14 +114,12 @@ installUrl="/admin/install/index.php"
 ynh_local_curl $installUrl "u_email=$email" "u_firstname=$firstname" "u_name=$lastname" "u_login=$admin" "u_pwd=$password" "u_pwd2=$password"
 
 #=================================================
-# GENERIC FINALIZATION
-#=================================================
 # SETUP FAIL2BAN
 #=================================================
-ynh_script_progression --message="Configuring Fail2Ban..."
+ynh_script_progression "Configuring Fail2Ban..."
 
 # Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config \
+ynh_config_add_fail2ban \
 	--logpath="/var/log/nginx/${domain}-error.log" \
 	--failregex="Invalid credentials in $install_dir/inc/class.auth.ldap.php .* client: <HOST>, .*https://$domain${path%/}/admin/auth.php"
 
@@ -136,4 +127,4 @@ ynh_add_fail2ban_config \
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression "Installation of $app completed"
