@@ -62,8 +62,8 @@ ram.runtime = "50M"
     [resources.sources.attic]
     prefetch = false
     in_subdir = 2
-    url = "https://download.dotclear.org/attic/dotclear-2.31.1.tar.gz"
-    sha256 = "b5cdfee93674dc2004c311a3009d65f957dfd3688be1ede238fb797eabccfbd0"
+    url = "https://download.dotclear.org/attic/dotclear-2.31.tar.gz"
+    sha256 = "d7cfc6b77dbef80008bdb5dd6f9d0c2865080f896b7671fbda839afd8a769326"
 
     [resources.system_user]
 
