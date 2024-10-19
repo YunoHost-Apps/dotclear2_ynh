@@ -21,7 +21,7 @@ cpe = "cpe:2.3:a:dotclear:dotclear"
 fund = "https://dotclear.org/donate"
 
 [integration]
-yunohost = ">= 11.2.18"
+yunohost = ">= 11.2.30"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
@@ -57,14 +57,14 @@ ram.runtime = "50M"
     [resources.sources.latest]
     prefetch = false
     in_subdir = 2
-    url = "https://download.dotclear.org/latest/dotclear-2.27.3.tar.gz"
-    sha256 = "86d31cd9f1d8f3147555858c339adb6752db9e8585731eddf697bb1e3fba80c6"
+    url = "https://download.dotclear.org/latest/dotclear-2.31.1.tar.gz"
+    sha256 = "b5cdfee93674dc2004c311a3009d65f957dfd3688be1ede238fb797eabccfbd0"
 
     [resources.sources.attic]
     prefetch = false
     in_subdir = 2
-    url = "https://download.dotclear.org/attic/dotclear-2.27.3.tar.gz"
-    sha256 = "86d31cd9f1d8f3147555858c339adb6752db9e8585731eddf697bb1e3fba80c6"
+    url = "https://download.dotclear.org/attic/dotclear-2.31.tar.gz"
+    sha256 = "d7cfc6b77dbef80008bdb5dd6f9d0c2865080f896b7671fbda839afd8a769326"
 
     [resources.system_user]
 
