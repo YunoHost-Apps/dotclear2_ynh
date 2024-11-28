@@ -5,7 +5,9 @@ Ini TIDAK boleh diedit dengan tangan.
 
 # DotClear 2 untuk YunoHost
 
-[![Tingkat integrasi](https://dash.yunohost.org/integration/dotclear2.svg)](https://ci-apps.yunohost.org/ci/apps/dotclear2/) ![Status kerja](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![Status pemeliharaan](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)
+[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/dotclear2)](https://ci-apps.yunohost.org/ci/apps/dotclear2/)
+![Status kerja](https://apps.yunohost.org/badge/state/dotclear2)
+![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/dotclear2)
 
 [![Pasang DotClear 2 dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=dotclear2)
 
@@ -19,7 +21,7 @@ Ini TIDAK boleh diedit dengan tangan.
 Dotclear is an open-source web publishing software. Dotclear project's purpose is to provide a user-friendly tool allowing anyone to publish on the web, regardless of their technical skills.
 
 
-**Versi terkirim:** 2.31.1~ynh1
+**Versi terkirim:** 2.32.1~ynh1
 
 **Demo:** <https://www.softaculous.com/demos/Dotclear>
 
