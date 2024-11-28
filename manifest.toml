@@ -7,7 +7,7 @@ name = "DotClear 2"
 description.en = "Blog publishing application"
 description.fr = "Moteur de blog"
 
-version = "2.31.1~ynh1"
+version = "2.32.1~ynh1"
 
 maintainers = ["kay0u"]
 
@@ -56,14 +56,14 @@ ram.runtime = "50M"
     [resources.sources.latest]
     prefetch = false
     in_subdir = 2
-    url = "https://download.dotclear.org/latest/dotclear-2.31.1.tar.gz"
-    sha256 = "b5cdfee93674dc2004c311a3009d65f957dfd3688be1ede238fb797eabccfbd0"
+    url = "https://download.dotclear.org/latest/dotclear-2.32.1.tar.gz"
+    sha256 = "eae182521b0335dbdb3f8d03ed5b835f9f2be7b18735ba15bc3a3af2d1763bcf"
 
     [resources.sources.attic]
     prefetch = false
     in_subdir = 2
-    url = "https://download.dotclear.org/attic/dotclear-2.31.1.tar.gz"
-    sha256 = "b5cdfee93674dc2004c311a3009d65f957dfd3688be1ede238fb797eabccfbd0"
+    url = "https://download.dotclear.org/attic/dotclear-2.32.1.tar.gz"
+    sha256 = "eae182521b0335dbdb3f8d03ed5b835f9f2be7b18735ba15bc3a3af2d1763bcf"
 
     [resources.system_user]
 
