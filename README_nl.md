@@ -5,7 +5,9 @@ Hij mag NIET handmatig aangepast worden.
 
 # DotClear 2 voor Yunohost
 
-[![Integratieniveau](https://dash.yunohost.org/integration/dotclear2.svg)](https://ci-apps.yunohost.org/ci/apps/dotclear2/) ![Mate van functioneren](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![Onderhoudsstatus](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)
+[![Integratieniveau](https://apps.yunohost.org/badge/integration/dotclear2)](https://ci-apps.yunohost.org/ci/apps/dotclear2/)
+![Mate van functioneren](https://apps.yunohost.org/badge/state/dotclear2)
+![Onderhoudsstatus](https://apps.yunohost.org/badge/maintained/dotclear2)
 
 [![DotClear 2 met Yunohost installeren](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=dotclear2)
 

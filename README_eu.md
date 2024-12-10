@@ -5,7 +5,9 @@ EZ editatu eskuz.
 
 # DotClear 2 YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/dotclear2.svg)](https://ci-apps.yunohost.org/ci/apps/dotclear2/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)
+[![Integrazio maila](https://apps.yunohost.org/badge/integration/dotclear2)](https://ci-apps.yunohost.org/ci/apps/dotclear2/)
+![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/dotclear2)
+![Mantentze egoera](https://apps.yunohost.org/badge/maintained/dotclear2)
 
 [![Instalatu DotClear 2 YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=dotclear2)
 

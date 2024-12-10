@@ -5,7 +5,9 @@
 
 # YunoHost 上的 DotClear 2
 
-[![集成程度](https://dash.yunohost.org/integration/dotclear2.svg)](https://ci-apps.yunohost.org/ci/apps/dotclear2/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)
+[![集成程度](https://apps.yunohost.org/badge/integration/dotclear2)](https://ci-apps.yunohost.org/ci/apps/dotclear2/)
+![工作状态](https://apps.yunohost.org/badge/state/dotclear2)
+![维护状态](https://apps.yunohost.org/badge/maintained/dotclear2)
 
 [![使用 YunoHost 安装 DotClear 2](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=dotclear2)
 

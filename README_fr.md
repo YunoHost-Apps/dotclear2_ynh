@@ -5,7 +5,9 @@ Il NE doit PAS être modifié à la main.
 
 # DotClear 2 pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/dotclear2.svg)](https://ci-apps.yunohost.org/ci/apps/dotclear2/) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/dotclear2.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/dotclear2.maintain.svg)
+[![Niveau d’intégration](https://apps.yunohost.org/badge/integration/dotclear2)](https://ci-apps.yunohost.org/ci/apps/dotclear2/)
+![Statut du fonctionnement](https://apps.yunohost.org/badge/state/dotclear2)
+![Statut de maintenance](https://apps.yunohost.org/badge/maintained/dotclear2)
 
 [![Installer DotClear 2 avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=dotclear2)
 
