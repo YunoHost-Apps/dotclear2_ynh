@@ -85,8 +85,10 @@ ynh_config_add --template="class.auth.ldap.php" --destination="$install_dir/inc/
 
 cat << EOF >> $php_config
 
-require dirname(__FILE__).'/class.auth.ldap.php';
-define('DC_AUTH_CLASS','ldapDcAuth');
+require_once dirname(__FILE__).'/class.auth.ldap.php';
+define('DC_AUTH_LDAP','ldapDcAuth');
+use Dotclear\Helper\Container\Factories;
+Factories::addService("core", AuthInterface::class, DC_AUTH_LDAP);
 EOF
 
 ynh_store_file_checksum $php_config

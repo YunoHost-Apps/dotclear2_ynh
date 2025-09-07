@@ -46,7 +46,7 @@ set__blogs_list() {
     removed_ids_array=(`echo ${!old_domain_array[@]} $!domain_array[@]} | tr ' ' '\n' | sort | uniq -D | uniq `)
 
     for id in $removed_ids_array; do
-        if [ ynh_permission_exists --permission="$id" ]; then
+        if ynh_permission_exists --permission="$id"; then
             ynh_permission_delete --permission="$id"
         fi
         ynh_safe_rm "/etc/nginx/conf.d/${old_domain_array[$id]}.d/$app.conf"
@@ -64,7 +64,7 @@ set__blogs_list() {
             ynh_config_add --template="nginx.conf" --destination="/etc/nginx/conf.d/${domain_array[$id]}.d/$app.conf"
         fi
 
-        if [ ynh_permission_exists --permission="$id" ]; then
+        if ynh_permission_exists --permission="$id"; then
             ynh_permission_url --permission="$id" --url="$domain_array[$id]$path_array[$id]"
             ynh_permission_url --permission="$id.admin" --url="$domain_array[$id]$path_array[$id]/admin"
         else

@@ -7,7 +7,7 @@ name = "DotClear 2"
 description.en = "Blog publishing application"
 description.fr = "Moteur de blog"
 
-version = "2.27.3~ynh1"
+version = "2.35~ynh1"
 
 maintainers = ["kay0u"]
 
@@ -21,13 +21,12 @@ cpe = "cpe:2.3:a:dotclear:dotclear"
 fund = "https://dotclear.org/donate"
 
 [integration]
-yunohost = ">= 11.2.30"
+yunohost = ">= 12.1.17"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 
 ldap = true
-
 sso = false
 
 disk = "50M"
@@ -57,14 +56,14 @@ ram.runtime = "50M"
     [resources.sources.latest]
     prefetch = false
     in_subdir = 2
-    url = "https://download.dotclear.org/latest/dotclear-2.31.1.tar.gz"
-    sha256 = "b5cdfee93674dc2004c311a3009d65f957dfd3688be1ede238fb797eabccfbd0"
+    url = "https://download.dotclear.org/latest/dotclear-2.35.tar.gz"
+    sha256 = "212ca915b296b37a1b849c804a7350bd6303955411c5c2081acde104385c8c6d"
 
     [resources.sources.attic]
     prefetch = false
     in_subdir = 2
-    url = "https://download.dotclear.org/attic/dotclear-2.31.tar.gz"
-    sha256 = "d7cfc6b77dbef80008bdb5dd6f9d0c2865080f896b7671fbda839afd8a769326"
+    url = "https://download.dotclear.org/attic/dotclear-2.34.tar.gz"
+    sha256 = "d0ecad58bed1500dafe04d4774ccd88fff57704a901c93a833efcff818c1f47c"
 
     [resources.system_user]
 
