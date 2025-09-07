@@ -58,6 +58,15 @@ fi
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
+if ynh_compare_current_package_version --comparison lt --version 2.30.0~ynh1; then
+	ynh_print_warn --message="Disable all plugins before the migration. To reactivate them, navigate to all plugins at $install_dir/plugins/, and remove each \"_disabled\" file one by one, and make sure you blog works as expected after each deletion"
+	for folder in "$install_dir"/plugins/*/
+	do
+		ynh_print_warn --message="Plugin $folder disabled"
+		touch "$folder"/_disabled
+	done
+fi
+
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Upgrading source files..."
@@ -116,8 +125,10 @@ ynh_add_config --template="../conf/class.auth.ldap.php" --destination="$install_
 
 cat << EOF >> $php_config
 
-require dirname(__FILE__).'/class.auth.ldap.php';
-define('DC_AUTH_CLASS','ldapDcAuth');
+require_once dirname(__FILE__).'/class.auth.ldap.php';
+define('DC_AUTH_LDAP','ldapDcAuth');
+use Dotclear\Helper\Container\Factories;
+Factories::addService("core", AuthInterface::class, DC_AUTH_LDAP);
 EOF
 
 # Recalculate and store the checksum of the file for the next upgrade.
