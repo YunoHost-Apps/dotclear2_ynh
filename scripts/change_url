@@ -1,52 +1,44 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC STARTING
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STANDARD MODIFICATIONS
-#=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
-ynh_script_progression --message="Updating NGINX web server configuration..." --weight=2
+ynh_script_progression "Updating NGINX web server configuration..."
 
-ynh_change_url_nginx_config
+ynh_config_change_url_nginx
 
-#=================================================
-# SPECIFIC MODIFICATIONS
 #=================================================
 # UPDATE THE DATABASE
 #=================================================
-ynh_script_progression --message="Updating database..."
+ynh_script_progression "Updating database..."
 
 new_index_url="${new_path%/}/index.php"
 new_public_url="${new_path%/}/public"
 new_themes_url="${new_path%/}/themes"
 
-ynh_mysql_execute_as_root --sql="UPDATE dc_blog SET blog_url='https://$new_domain$new_index_url?' WHERE dc_blog.blog_id='default'" --database=$db_name
-ynh_mysql_execute_as_root --sql="UPDATE dc_setting SET setting_value='$new_public_url' WHERE dc_setting.setting_id='public_url'" --database=$db_name
-ynh_mysql_execute_as_root --sql="UPDATE dc_setting SET setting_value='$new_themes_url' WHERE dc_setting.setting_id='themes_url'" --database=$db_name
+ynh_mysql_db_shell <<< "UPDATE dc_blog SET blog_url='https://$new_domain$new_index_url?' WHERE dc_blog.blog_id='default'"
+
+ynh_mysql_db_shell <<< "UPDATE dc_setting SET setting_value='$new_public_url' WHERE dc_setting.setting_id='public_url'"
+
+ynh_mysql_db_shell <<< "UPDATE dc_setting SET setting_value='$new_themes_url' WHERE dc_setting.setting_id='themes_url'"
 
 #=================================================
 # UPDATE CONFIGURATION
 #=================================================
-ynh_script_progression --message="Updating configuration file..."
+ynh_script_progression "Updating configuration file..."
 
 php_config=$install_dir/inc/config.php
 
-ynh_backup_if_checksum_is_different --file="$php_config"
+ynh_backup_if_checksum_is_different "$php_config"
 
 new_admin_url="${new_path%/}/admin/"
 old_admin_url="${old_path%/}/admin/"
-ynh_replace_string --match_string="'DC_ADMIN_URL', 'https://$old_domain$old_admin_url'" --replace_string="'DC_ADMIN_URL', 'https://$new_domain$new_admin_url'" --target_file=$php_config
+ynh_replace --match="'DC_ADMIN_URL', 'https://$old_domain$old_admin_url'" --replace="'DC_ADMIN_URL', 'https://$new_domain$new_admin_url'" --file=$php_config
 
-ynh_store_file_checksum --file="$php_config"
+ynh_store_file_checksum "$php_config"
 
 chmod 400 "$php_config"
 chown $app:$app "$php_config"
@@ -55,4 +47,4 @@ chown $app:$app "$php_config"
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Change of URL completed for $app" --last
+ynh_script_progression "Change of URL completed for $app"
